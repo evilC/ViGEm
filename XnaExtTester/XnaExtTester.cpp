@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "../XInputExtensions/XInputExtensions.h"
-#include "../Common/XInputOverrides.h"
+#include "XInputOverrides.h"
 #include <climits>
 
 int main()
