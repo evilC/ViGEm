@@ -31,6 +31,7 @@ SOFTWARE.
 #include "ViGEmClient.h"
 #include <winioctl.h>
 #include <limits.h>
+#include <mutex>
 
 #define VIGEM_TARGETS_MAX   USHRT_MAX
 
@@ -59,6 +60,7 @@ typedef struct _VIGEM_TARGET
     USHORT VendorId;
     USHORT ProductId;
     VIGEM_TARGET_TYPE Type;
+    DWORD_PTR Notification;
 
 } VIGEM_TARGET;
 
@@ -283,4 +285,134 @@ VIGEM_ERROR vigem_target_remove(PVIGEM_CLIENT vigem, PVIGEM_TARGET target)
     CloseHandle(lOverlapped.hEvent);
 
     return VIGEM_ERROR_REMOVAL_FAILED;
+}
+
+VIGEM_ERROR vigem_target_x360_register_notification(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, PVIGEM_X360_NOTIFICATION notification)
+{
+    if (vigem->hBusDevice == nullptr)
+    {
+        return VIGEM_ERROR_BUS_NOT_FOUND;
+    }
+
+    if (target->SerialNo == 0 || notification == nullptr)
+    {
+        return VIGEM_ERROR_INVALID_TARGET;
+    }
+
+    if (target->Notification == reinterpret_cast<DWORD_PTR>(notification))
+    {
+        return VIGEM_ERROR_CALLBACK_ALREADY_REGISTERED;
+    }
+
+    target->Notification = reinterpret_cast<DWORD_PTR>(notification);
+
+    std::thread _async{ [](
+        PVIGEM_TARGET _Target,
+        PVIGEM_CLIENT _Client)
+    {
+        DWORD error = ERROR_SUCCESS;
+        DWORD transfered = 0;
+        OVERLAPPED lOverlapped = { 0 };
+        lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+        XUSB_REQUEST_NOTIFICATION notify;
+        XUSB_REQUEST_NOTIFICATION_INIT(&notify, _Target->SerialNo);
+
+        do
+        {
+            DeviceIoControl(_Client->hBusDevice, IOCTL_XUSB_REQUEST_NOTIFICATION, &notify, notify.Size, &notify, notify.Size, &transfered, &lOverlapped);
+
+            if (GetOverlappedResult(_Client->hBusDevice, &lOverlapped, &transfered, TRUE) != 0)
+            {
+                if (_Target->Notification == NULL)
+                {
+                    CloseHandle(lOverlapped.hEvent);
+                    return;
+                }
+
+                reinterpret_cast<PVIGEM_X360_NOTIFICATION>(_Target->Notification)(_Target, notify.LargeMotor, notify.SmallMotor, notify.LedNumber);
+            }
+            else
+            {
+                error = GetLastError();
+            }
+        } while (error != ERROR_OPERATION_ABORTED && error != ERROR_ACCESS_DENIED);
+
+        CloseHandle(lOverlapped.hEvent);
+
+    }, target, vigem };
+
+    _async.detach();
+
+    return VIGEM_ERROR_NONE;
+}
+
+VIGEM_ERROR vigem_target_ds4_register_notification(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, PVIGEM_DS4_NOTIFICATION notification)
+{
+    if (vigem->hBusDevice == nullptr)
+    {
+        return VIGEM_ERROR_BUS_NOT_FOUND;
+    }
+
+    if (target->SerialNo == 0 || notification == nullptr)
+    {
+        return VIGEM_ERROR_INVALID_TARGET;
+    }
+
+    if (target->Notification == reinterpret_cast<DWORD_PTR>(notification))
+    {
+        return VIGEM_ERROR_CALLBACK_ALREADY_REGISTERED;
+    }
+
+    target->Notification = reinterpret_cast<DWORD_PTR>(notification);
+
+    std::thread _async{ [](
+        PVIGEM_TARGET _Target,
+        PVIGEM_CLIENT _Client)
+    {
+        DWORD error = ERROR_SUCCESS;
+        DWORD transfered = 0;
+        OVERLAPPED lOverlapped = { 0 };
+        lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+        DS4_REQUEST_NOTIFICATION notify;
+        DS4_REQUEST_NOTIFICATION_INIT(&notify, _Target->SerialNo);
+
+        do
+        {
+            DeviceIoControl(_Client->hBusDevice, IOCTL_DS4_REQUEST_NOTIFICATION, &notify, notify.Size, &notify, notify.Size, &transfered, &lOverlapped);
+
+            if (GetOverlappedResult(_Client->hBusDevice, &lOverlapped, &transfered, TRUE) != 0)
+            {
+                if (_Target->Notification == NULL)
+                {
+                    CloseHandle(lOverlapped.hEvent);
+                    return;
+                }
+
+                reinterpret_cast<PVIGEM_DS4_NOTIFICATION>(_Target->Notification)(_Target, notify.Report.LargeMotor, notify.Report.SmallMotor, notify.Report.LightbarColor);
+            }
+            else
+            {
+                error = GetLastError();
+            }
+        } while (error != ERROR_OPERATION_ABORTED && error != ERROR_ACCESS_DENIED);
+
+        CloseHandle(lOverlapped.hEvent);
+
+    }, target, vigem };
+
+    _async.detach();
+
+    return VIGEM_ERROR_NONE;
+}
+
+void vigem_target_x360_unregister_notification(PVIGEM_TARGET target)
+{
+    target->Notification = NULL;
+}
+
+void vigem_target_ds4_unregister_notification(PVIGEM_TARGET target)
+{
+    target->Notification = NULL;
 }
