@@ -416,3 +416,87 @@ void vigem_target_ds4_unregister_notification(PVIGEM_TARGET target)
 {
     target->Notification = NULL;
 }
+
+void vigem_target_set_vid(PVIGEM_TARGET target, USHORT vid)
+{
+    target->VendorId = vid;
+}
+
+void vigem_target_set_pid(PVIGEM_TARGET target, USHORT pid)
+{
+    target->ProductId = pid;
+}
+
+VIGEM_ERROR vigem_target_x360_update(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, XUSB_REPORT report)
+{
+    if (vigem->hBusDevice == nullptr)
+    {
+        return VIGEM_ERROR_BUS_NOT_FOUND;
+    }
+
+    if (target->SerialNo == 0)
+    {
+        return VIGEM_ERROR_INVALID_TARGET;
+    }
+
+    DWORD transfered = 0;
+    OVERLAPPED lOverlapped = { 0 };
+    lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+    XUSB_SUBMIT_REPORT xsr;
+    XUSB_SUBMIT_REPORT_INIT(&xsr, target->SerialNo);
+
+    xsr.Report = report;
+
+    DeviceIoControl(vigem->hBusDevice, IOCTL_XUSB_SUBMIT_REPORT, &xsr, xsr.Size, nullptr, 0, &transfered, &lOverlapped);
+
+    if (GetOverlappedResult(vigem->hBusDevice, &lOverlapped, &transfered, TRUE) == 0)
+    {
+        if (GetLastError() == ERROR_ACCESS_DENIED)
+        {
+            CloseHandle(lOverlapped.hEvent);
+            return VIGEM_ERROR_INVALID_TARGET;
+        }
+    }
+
+    CloseHandle(lOverlapped.hEvent);
+
+    return VIGEM_ERROR_NONE;
+}
+
+VIGEM_ERROR vigem_target_ds4_update(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, DS4_REPORT report)
+{
+    if (vigem->hBusDevice == nullptr)
+    {
+        return VIGEM_ERROR_BUS_NOT_FOUND;
+    }
+
+    if (target->SerialNo == 0)
+    {
+        return VIGEM_ERROR_INVALID_TARGET;
+    }
+
+    DWORD transfered = 0;
+    OVERLAPPED lOverlapped = { 0 };
+    lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+    DS4_SUBMIT_REPORT dsr;
+    DS4_SUBMIT_REPORT_INIT(&dsr, target->SerialNo);
+
+    dsr.Report = report;
+
+    DeviceIoControl(vigem->hBusDevice, IOCTL_DS4_SUBMIT_REPORT, &dsr, dsr.Size, nullptr, 0, &transfered, &lOverlapped);
+
+    if (GetOverlappedResult(vigem->hBusDevice, &lOverlapped, &transfered, TRUE) == 0)
+    {
+        if (GetLastError() == ERROR_ACCESS_DENIED)
+        {
+            CloseHandle(lOverlapped.hEvent);
+            return VIGEM_ERROR_INVALID_TARGET;
+        }
+    }
+
+    CloseHandle(lOverlapped.hEvent);
+
+    return VIGEM_ERROR_NONE;
+}
