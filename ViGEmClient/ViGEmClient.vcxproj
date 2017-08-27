@@ -147,9 +147,13 @@
   <ItemGroup>
     <ClInclude Include="..\Include\ViGEmBusShared.h" />
     <ClInclude Include="..\Include\ViGEmClient.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ViGEmClient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ViGEmClient.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
