@@ -18,7 +18,7 @@
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
     </Filter>
     <Filter Include="Header Files\Common">
-      <UniqueIdentifier>{0d3e79e3-cfc8-47b4-9e96-6ccbe57cefa0}</UniqueIdentifier>
+      <UniqueIdentifier>{bbf85b1d-5a75-4302-af4e-46627fcf0d78}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,14 +54,14 @@
     <ClInclude Include="Xgip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\ViGEmBusShared.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\ViGEmBusDriver.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
     <ClInclude Include="ByteArray.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ViGEmBusDriver.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ViGEmBusShared.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

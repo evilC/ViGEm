@@ -147,6 +147,12 @@ Bus_GetPdo(
     IN WDFDEVICE Device, 
     IN ULONG SerialNo);
 
+NTSTATUS
+Bus_CreatePdoResult(
+    _In_ PINTERFACE InterfaceHeader,
+    _In_ ULONG Serial,
+    _In_ NTSTATUS Status
+);
 
 #pragma endregion
 

@@ -72,6 +72,8 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
     WDF_OBJECT_ATTRIBUTES       fdoAttributes;
     WDF_OBJECT_ATTRIBUTES       fileHandleAttributes;
     PFDO_DEVICE_DATA            pFDOData;
+    VIGEM_BUS_INTERFACE         busInterface;
+    PINTERFACE                  interfaceHeader;
 
     UNREFERENCED_PARAMETER(Driver);
 
@@ -145,6 +147,44 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
     pFDOData->NextSessionId = FDO_FIRST_SESSION_ID;
 
 #pragma endregion
+
+#pragma region Add query interface
+
+    // 
+    // Set up the common interface header
+    // 
+    interfaceHeader = &busInterface.InterfaceHeader;
+
+    interfaceHeader->Size = sizeof(VIGEM_BUS_INTERFACE);
+    interfaceHeader->Version = VIGEM_BUS_INTERFACE_VERSION;
+    interfaceHeader->Context = (PVOID)device;
+
+    // 
+    // We don't pay any particular attention to the reference
+    // counting of this interface, but we MUST specify routines for
+    // it. Luckily the framework provides dummy routines
+    // 
+    interfaceHeader->InterfaceReference = WdfDeviceInterfaceReferenceNoOp;
+    interfaceHeader->InterfaceDereference = WdfDeviceInterfaceDereferenceNoOp;
+
+    busInterface.BusCreatePdoResult = Bus_CreatePdoResult;
+
+    WDF_QUERY_INTERFACE_CONFIG queryInterfaceConfig;
+
+    WDF_QUERY_INTERFACE_CONFIG_INIT(&queryInterfaceConfig,
+        interfaceHeader,
+        &GUID_VIGEM_INTERFACE_STANDARD,
+        WDF_NO_EVENT_CALLBACK);
+
+    status = WdfDeviceAddQueryInterface(device,
+        &queryInterfaceConfig);
+
+    if (!NT_SUCCESS(status)) {
+        KdPrint((DRIVERNAME "WdfDeviceAddQueryInterface failed 0x%0x\n", status));
+        return(status);
+    }
+
+#pragma endregion 
 
 #pragma region Create symbolic link
 
@@ -342,4 +382,18 @@ Bus_FileClose(
     }
 
     WdfChildListEndIteration(list, &iterator);
+}
+
+NTSTATUS
+Bus_CreatePdoResult(
+    _In_ PINTERFACE InterfaceHeader,
+    _In_ ULONG Serial,
+    _In_ NTSTATUS Status
+    )
+{
+    UNREFERENCED_PARAMETER(InterfaceHeader);
+    UNREFERENCED_PARAMETER(Serial);
+    UNREFERENCED_PARAMETER(Status);
+
+    return STATUS_SUCCESS;
 }
