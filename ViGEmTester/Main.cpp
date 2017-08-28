@@ -17,6 +17,8 @@ VOID my_x360_callback(
         LargeMotor,
         SmallMotor,
         LedNumber);
+
+    vigem_target_x360_unregister_notification(Target);
 }
 
 VOID my_ds4_callback(
