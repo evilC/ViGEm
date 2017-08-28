@@ -31,3 +31,6 @@ honestus --version-from-file version.txt --target-file "%solution%\ViGEmUM.NET\P
 
 rem ViGEmUM Library
 honestus --version-from-file version.txt --target-file "%solution%\ViGEmUM\ViGEmUM.rc" --resource.file-version --resource.product-version
+
+rem ViGEmClient Library
+honestus --version-from-file version.txt --target-file "%solution%\ViGEmClient\ViGEmClient.rc" --resource.file-version --resource.product-version
