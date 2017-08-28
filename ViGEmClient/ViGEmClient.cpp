@@ -433,6 +433,16 @@ void vigem_target_set_pid(PVIGEM_TARGET target, USHORT pid)
     target->ProductId = pid;
 }
 
+USHORT vigem_target_get_vid(PVIGEM_TARGET target)
+{
+    return target->VendorId;
+}
+
+USHORT vigem_target_get_pid(PVIGEM_TARGET target)
+{
+    return target->ProductId;
+}
+
 VIGEM_ERROR vigem_target_x360_update(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, XUSB_REPORT report)
 {
     if (vigem->hBusDevice == nullptr)
@@ -510,4 +520,9 @@ VIGEM_ERROR vigem_target_ds4_update(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, D
 ULONG vigem_target_get_index(PVIGEM_TARGET target)
 {
     return target->SerialNo;
+}
+
+VIGEM_TARGET_TYPE vigem_target_get_type(PVIGEM_TARGET target)
+{
+    return target->Type;
 }
