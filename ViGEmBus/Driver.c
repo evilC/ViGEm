@@ -457,8 +457,5 @@ Bus_PdoStageResult(
             }
         }
         WdfSpinLockRelease(pFdoData->PendingPluginRequestsLock);
-
-        KdPrint((DRIVERNAME "Warning: request for serial %d not found\n", Serial));
     }
 }
-
