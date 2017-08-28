@@ -147,9 +147,10 @@ Bus_GetPdo(
     IN WDFDEVICE Device, 
     IN ULONG SerialNo);
 
-NTSTATUS
-Bus_CreatePdoResult(
+VOID
+Bus_PdoStageResult(
     _In_ PINTERFACE InterfaceHeader,
+    _In_ VIGEM_PDO_STAGE Stage,
     _In_ ULONG Serial,
     _In_ NTSTATUS Status
 );

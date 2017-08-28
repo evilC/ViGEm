@@ -167,7 +167,7 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
     interfaceHeader->InterfaceReference = WdfDeviceInterfaceReferenceNoOp;
     interfaceHeader->InterfaceDereference = WdfDeviceInterfaceDereferenceNoOp;
 
-    busInterface.BusCreatePdoResult = Bus_CreatePdoResult;
+    busInterface.BusPdoStageResult = Bus_PdoStageResult;
 
     WDF_QUERY_INTERFACE_CONFIG queryInterfaceConfig;
 
@@ -384,16 +384,16 @@ Bus_FileClose(
     WdfChildListEndIteration(list, &iterator);
 }
 
-NTSTATUS
-Bus_CreatePdoResult(
+VOID
+Bus_PdoStageResult(
     _In_ PINTERFACE InterfaceHeader,
+    _In_ VIGEM_PDO_STAGE Stage,
     _In_ ULONG Serial,
     _In_ NTSTATUS Status
     )
 {
     UNREFERENCED_PARAMETER(InterfaceHeader);
-    UNREFERENCED_PARAMETER(Serial);
-    UNREFERENCED_PARAMETER(Status);
 
-    return STATUS_SUCCESS;
+    KdPrint((DRIVERNAME "Bus_PdoStageResult: Stage: %d, Serial: %d, status: 0x%X\n", Stage, Serial, Status));
 }
+
