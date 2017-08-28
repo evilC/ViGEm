@@ -31,6 +31,7 @@ SOFTWARE.
 #pragma alloc_text (PAGE, Bus_EvtDeviceAdd)
 #pragma alloc_text (PAGE, Bus_DeviceFileCreate)
 #pragma alloc_text (PAGE, Bus_FileClose)
+#pragma alloc_text (PAGE, Bus_PdoStageResult)
 #endif
 
 
@@ -155,7 +156,7 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
     collectionAttributes.ParentObject = device;
 
     status = WdfCollectionCreate(&collectionAttributes, &pFDOData->PendingPluginRequests);
-    if(!NT_SUCCESS(status))
+    if (!NT_SUCCESS(status))
     {
         KdPrint((DRIVERNAME "WdfCollectionCreate failed with status 0x%X\n", status));
         return STATUS_UNSUCCESSFUL;
@@ -373,11 +374,11 @@ Bus_FileClose(
         }
 
         KdPrint((DRIVERNAME "Bus_FileClose enumerate: status=%d devicePID=%d currentPID=%d fileSessionId=%d deviceSessionId=%d ownerIsDriver=%d\n",
-            (int)childInfo.Status, 
-            (int)description.OwnerProcessId, 
+            (int)childInfo.Status,
+            (int)description.OwnerProcessId,
             (int)CURRENT_PROCESS_ID(),
-            (int)pFileData->SessionId, 
-            (int)description.SessionId, 
+            (int)pFileData->SessionId,
+            (int)description.SessionId,
             (int)description.OwnerIsDriver));
 
         // Only unplug devices with matching session id
@@ -399,16 +400,50 @@ Bus_FileClose(
     WdfChildListEndIteration(list, &iterator);
 }
 
+_Use_decl_annotations_
 VOID
 Bus_PdoStageResult(
     _In_ PINTERFACE InterfaceHeader,
     _In_ VIGEM_PDO_STAGE Stage,
     _In_ ULONG Serial,
     _In_ NTSTATUS Status
-    )
+)
 {
+    ULONG i;
+    PFDO_DEVICE_DATA pFdoData;
+    WDFREQUEST curRequest;
+    ULONG curSerial;
+
     UNREFERENCED_PARAMETER(InterfaceHeader);
 
+    PAGED_CODE();
+
     KdPrint((DRIVERNAME "Bus_PdoStageResult: Stage: %d, Serial: %d, status: 0x%X\n", Stage, Serial, Status));
+
+    pFdoData = FdoGetData(InterfaceHeader->Context);
+
+    //
+    // If any stage fails or is last stage, get associated request and complete it
+    // 
+    if (!NT_SUCCESS(Status) || Stage == ViGEmPdoUsbGetStatusFromDevice)
+    {
+        for (i = 0; i < WdfCollectionGetCount(pFdoData->PendingPluginRequests); i++)
+        {
+            curRequest = WdfCollectionGetItem(pFdoData->PendingPluginRequests, i);
+            curSerial = PluginRequestGetData(curRequest)->Serial;
+
+            if (Serial == curSerial)
+            {
+                KdPrint((DRIVERNAME "Request for serial %d found\n", curSerial));
+                WdfRequestComplete(curRequest, Status);
+
+                WdfCollectionRemove(pFdoData->PendingPluginRequests, curRequest);
+
+                return;
+            }
+        }
+
+        KdPrint((DRIVERNAME "Warning: request for serial %d not found\n", Serial));
+    }
 }
 

@@ -49,11 +49,16 @@ NTSTATUS Bus_PlugInDevice(
     WDFFILEOBJECT                   fileObject;
     PFDO_FILE_DATA                  pFileData;
     size_t                          length = 0;
+    WDF_OBJECT_ATTRIBUTES           requestAttribs;
+    PFDO_PLUGIN_REQUEST_DATA        pReqData;
+    PFDO_DEVICE_DATA                pFdoData;
 
     PAGED_CODE();
 
-    status = WdfRequestRetrieveInputBuffer(Request, sizeof(VIGEM_PLUGIN_TARGET), (PVOID)&plugIn, &length);
 
+    pFdoData = FdoGetData(Device);
+
+    status = WdfRequestRetrieveInputBuffer(Request, sizeof(VIGEM_PLUGIN_TARGET), (PVOID)&plugIn, &length);
     if (!NT_SUCCESS(status))
     {
         KdPrint((DRIVERNAME "WdfRequestRetrieveInputBuffer failed 0x%x\n", status));
@@ -145,6 +150,39 @@ NTSTATUS Bus_PlugInDevice(
         // not unique, return error.
         //
         status = STATUS_INVALID_PARAMETER;
+    }
+    else
+    {
+        WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&requestAttribs, FDO_PLUGIN_REQUEST_DATA);
+
+        //
+        // Allocate context data to request
+        // 
+        status = WdfObjectAllocateContext(
+            Request,
+            &requestAttribs,
+            (PVOID)&pReqData
+        );
+
+        if (NT_SUCCESS(status))
+        {
+            //
+            // Glue current serial to request
+            // 
+            pReqData->Serial = plugIn->SerialNo;
+            
+            //
+            // Keep track of pending request in collection
+            // 
+            status = WdfCollectionAdd(pFdoData->PendingPluginRequests, Request);
+            if(!NT_SUCCESS(status))
+            {
+                KdPrint((DRIVERNAME "WdfCollectionAdd failed with status 0x%X", status));
+                return status;
+            }
+
+            status = STATUS_PENDING;
+        }
     }
 
     return status;
