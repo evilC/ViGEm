@@ -6,26 +6,26 @@
 
 
 VOID my_x360_callback(
-    ULONG Index,
+    PVIGEM_TARGET Target,
     UCHAR LargeMotor,
     UCHAR SmallMotor,
     UCHAR LedNumber)
 {
     printf("X360 Response - Serial: %d, LM: %d, SM: %d, LED: %d\n",
-        Index,
+        vigem_target_get_index(Target),
         LargeMotor,
         SmallMotor,
         LedNumber);
 }
 
 VOID my_ds4_callback(
-    ULONG Index,
+    PVIGEM_TARGET Target,
     UCHAR LargeMotor,
     UCHAR SmallMotor,
     DS4_LIGHTBAR_COLOR LightbarColor)
 {
     printf("DS4 Response - Serial: %d, LM: %d, SM: %d, R: %d, G: %d, B: %d\n",
-        Index,
+        vigem_target_get_index(Target),
         LargeMotor,
         SmallMotor,
         LightbarColor.Red,

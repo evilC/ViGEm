@@ -336,7 +336,7 @@ VIGEM_ERROR vigem_target_x360_register_notification(PVIGEM_CLIENT vigem, PVIGEM_
                     return;
                 }
 
-                reinterpret_cast<PVIGEM_X360_NOTIFICATION>(_Target->Notification)(_Target->SerialNo, notify.LargeMotor, notify.SmallMotor, notify.LedNumber);
+                reinterpret_cast<PVIGEM_X360_NOTIFICATION>(_Target->Notification)(_Target, notify.LargeMotor, notify.SmallMotor, notify.LedNumber);
             }
             else
             {
@@ -396,7 +396,7 @@ VIGEM_ERROR vigem_target_ds4_register_notification(PVIGEM_CLIENT vigem, PVIGEM_T
                     return;
                 }
 
-                reinterpret_cast<PVIGEM_DS4_NOTIFICATION>(_Target->Notification)(_Target->SerialNo, notify.Report.LargeMotor, notify.Report.SmallMotor, notify.Report.LightbarColor);
+                reinterpret_cast<PVIGEM_DS4_NOTIFICATION>(_Target->Notification)(_Target, notify.Report.LargeMotor, notify.Report.SmallMotor, notify.Report.LightbarColor);
             }
             else
             {
