@@ -251,6 +251,66 @@ VIGEM_ERROR vigem_target_add(PVIGEM_CLIENT vigem, PVIGEM_TARGET target)
     return VIGEM_ERROR_NO_FREE_SLOT;
 }
 
+VIGEM_ERROR vigem_target_add_async(PVIGEM_CLIENT vigem, PVIGEM_TARGET target, PVIGEM_TARGET_ADD_RESULT result)
+{
+    if (vigem->hBusDevice == nullptr)
+    {
+        return VIGEM_ERROR_BUS_NOT_FOUND;
+    }
+
+    if (target->State == VIGEM_TARGET_NEW)
+    {
+        return VIGEM_ERROR_TARGET_UNINITIALIZED;
+    }
+
+    if (target->State == VIGEM_TARGET_CONNECTED)
+    {
+        return VIGEM_ERROR_ALREADY_CONNECTED;
+    }
+
+    std::thread _async{ [](
+        PVIGEM_TARGET _Target,
+        PVIGEM_CLIENT _Client,
+        PVIGEM_TARGET_ADD_RESULT _Result)
+    {
+        DWORD transfered = 0;
+        VIGEM_PLUGIN_TARGET plugin;
+        OVERLAPPED lOverlapped = { 0 };
+        lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+        for (_Target->SerialNo = 1; _Target->SerialNo <= VIGEM_TARGETS_MAX; _Target->SerialNo++)
+        {
+            VIGEM_PLUGIN_TARGET_INIT(&plugin, _Target->SerialNo, _Target->Type);
+
+            plugin.VendorId = _Target->VendorId;
+            plugin.ProductId = _Target->ProductId;
+
+            DeviceIoControl(_Client->hBusDevice, IOCTL_VIGEM_PLUGIN_TARGET, &plugin, plugin.Size, nullptr, 0, &transfered, &lOverlapped);
+
+            if (GetOverlappedResult(_Client->hBusDevice, &lOverlapped, &transfered, TRUE) != 0)
+            {
+                _Target->State = VIGEM_TARGET_CONNECTED;
+                CloseHandle(lOverlapped.hEvent);
+
+                if (_Result)
+                    _Result(_Client, _Target, VIGEM_ERROR_NONE);
+
+                return;
+            }
+        }
+
+        CloseHandle(lOverlapped.hEvent);
+
+        if (_Result)
+            _Result(_Client, _Target, VIGEM_ERROR_NO_FREE_SLOT);
+
+    }, target, vigem, result };
+
+    _async.detach();
+
+    return VIGEM_ERROR_NONE;
+}
+
 VIGEM_ERROR vigem_target_remove(PVIGEM_CLIENT vigem, PVIGEM_TARGET target)
 {
     if (vigem->hBusDevice == nullptr)
@@ -326,7 +386,14 @@ VIGEM_ERROR vigem_target_x360_register_notification(PVIGEM_CLIENT vigem, PVIGEM_
 
         do
         {
-            DeviceIoControl(_Client->hBusDevice, IOCTL_XUSB_REQUEST_NOTIFICATION, &notify, notify.Size, &notify, notify.Size, &transfered, &lOverlapped);
+            DeviceIoControl(_Client->hBusDevice, 
+                IOCTL_XUSB_REQUEST_NOTIFICATION, 
+                &notify, 
+                notify.Size, 
+                &notify, 
+                notify.Size, 
+                &transfered, 
+                &lOverlapped);
 
             if (GetOverlappedResult(_Client->hBusDevice, &lOverlapped, &transfered, TRUE) != 0)
             {
@@ -336,7 +403,12 @@ VIGEM_ERROR vigem_target_x360_register_notification(PVIGEM_CLIENT vigem, PVIGEM_
                     return;
                 }
 
-                reinterpret_cast<PVIGEM_X360_NOTIFICATION>(_Target->Notification)(_Target, notify.LargeMotor, notify.SmallMotor, notify.LedNumber);
+                reinterpret_cast<PVIGEM_X360_NOTIFICATION>(_Target->Notification)(
+                    _Client,
+                    _Target, 
+                    notify.LargeMotor, 
+                    notify.SmallMotor, 
+                    notify.LedNumber);
             }
             else
             {
@@ -386,7 +458,14 @@ VIGEM_ERROR vigem_target_ds4_register_notification(PVIGEM_CLIENT vigem, PVIGEM_T
 
         do
         {
-            DeviceIoControl(_Client->hBusDevice, IOCTL_DS4_REQUEST_NOTIFICATION, &notify, notify.Size, &notify, notify.Size, &transfered, &lOverlapped);
+            DeviceIoControl(_Client->hBusDevice, 
+                IOCTL_DS4_REQUEST_NOTIFICATION, 
+                &notify, 
+                notify.Size, 
+                &notify, 
+                notify.Size, 
+                &transfered, 
+                &lOverlapped);
 
             if (GetOverlappedResult(_Client->hBusDevice, &lOverlapped, &transfered, TRUE) != 0)
             {
@@ -396,7 +475,12 @@ VIGEM_ERROR vigem_target_ds4_register_notification(PVIGEM_CLIENT vigem, PVIGEM_T
                     return;
                 }
 
-                reinterpret_cast<PVIGEM_DS4_NOTIFICATION>(_Target->Notification)(_Target, notify.Report.LargeMotor, notify.Report.SmallMotor, notify.Report.LightbarColor);
+                reinterpret_cast<PVIGEM_DS4_NOTIFICATION>(_Target->Notification)(
+                    _Client, 
+                    _Target, 
+                    notify.Report.LargeMotor, 
+                    notify.Report.SmallMotor, 
+                    notify.Report.LightbarColor);
             }
             else
             {

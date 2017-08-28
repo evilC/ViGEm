@@ -6,6 +6,7 @@
 
 
 VOID my_x360_callback(
+    PVIGEM_CLIENT Client,
     PVIGEM_TARGET Target,
     UCHAR LargeMotor,
     UCHAR SmallMotor,
@@ -19,6 +20,7 @@ VOID my_x360_callback(
 }
 
 VOID my_ds4_callback(
+    PVIGEM_CLIENT Client,
     PVIGEM_TARGET Target,
     UCHAR LargeMotor,
     UCHAR SmallMotor,
@@ -31,6 +33,23 @@ VOID my_ds4_callback(
         LightbarColor.Red,
         LightbarColor.Green,
         LightbarColor.Blue);
+}
+
+VOID my_target_add_callback(
+    PVIGEM_CLIENT Client,
+    PVIGEM_TARGET Target,
+    VIGEM_ERROR Result)
+{
+    printf("Target with type %d and serial %d is live with result %d\n", 
+        vigem_target_get_type(Target), 
+        vigem_target_get_index(Target), Result);
+
+    auto ret = vigem_target_ds4_register_notification(Client, Target, reinterpret_cast<PVIGEM_DS4_NOTIFICATION>(my_ds4_callback));
+    if (!VIGEM_SUCCESS(ret))
+    {
+        printf("Couldn't add DS4 notification callback\n");
+        return;
+    }
 }
 
 void main()
@@ -56,9 +75,20 @@ void main()
     ret = vigem_target_x360_register_notification(driver, x360, reinterpret_cast<PVIGEM_X360_NOTIFICATION>(my_x360_callback));
     if (!VIGEM_SUCCESS(ret))
     {
-        printf("Couldn't add notification callback");
+        printf("Couldn't add X360 notification callback");
         return;
     }
+
+    auto ds4 = vigem_target_ds4_alloc();
+
+    ret = vigem_target_add_async(driver, ds4, reinterpret_cast<PVIGEM_TARGET_ADD_RESULT>(my_target_add_callback));
+    if (!VIGEM_SUCCESS(ret))
+    {
+        printf("Async plugin failed");
+        return;
+    }
+    
+    getchar();
 
     XUSB_REPORT report;
     XUSB_REPORT_INIT(&report);
