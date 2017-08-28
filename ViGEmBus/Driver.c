@@ -71,6 +71,7 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
     WDF_FILEOBJECT_CONFIG       foConfig;
     WDF_OBJECT_ATTRIBUTES       fdoAttributes;
     WDF_OBJECT_ATTRIBUTES       fileHandleAttributes;
+    WDF_OBJECT_ATTRIBUTES       collectionAttributes;
     PFDO_DEVICE_DATA            pFDOData;
     VIGEM_BUS_INTERFACE         busInterface;
     PINTERFACE                  interfaceHeader;
@@ -145,6 +146,20 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
 
     pFDOData->InterfaceReferenceCounter = 0;
     pFDOData->NextSessionId = FDO_FIRST_SESSION_ID;
+
+#pragma endregion
+
+#pragma region Create pending requests collection
+
+    WDF_OBJECT_ATTRIBUTES_INIT(&collectionAttributes);
+    collectionAttributes.ParentObject = device;
+
+    status = WdfCollectionCreate(&collectionAttributes, &pFDOData->PendingPluginRequests);
+    if(!NT_SUCCESS(status))
+    {
+        KdPrint((DRIVERNAME "WdfCollectionCreate failed with status 0x%X\n", status));
+        return STATUS_UNSUCCESSFUL;
+    }
 
 #pragma endregion
 
