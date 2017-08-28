@@ -107,6 +107,11 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
 
 #pragma region Assign object name
 
+    //
+    // TODO: this will fail if more than one bus device is present on the system.
+    // Is this still necessary? If not, remove and work only with GUIDs!
+    // 
+
     status = WdfDeviceInitAssignName(DeviceInit, &VigemNtDeviceName);
     if (!NT_SUCCESS(status)) {
         KdPrint((DRIVERNAME "WdfDeviceInitAssignName failed with status 0x%x\n", status));
