@@ -189,7 +189,7 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
 
     WDF_QUERY_INTERFACE_CONFIG_INIT(&queryInterfaceConfig,
         interfaceHeader,
-        &GUID_VIGEM_INTERFACE_STANDARD,
+        &GUID_VIGEM_INTERFACE_PDO,
         WDF_NO_EVENT_CALLBACK);
 
     status = WdfDeviceAddQueryInterface(device,
@@ -400,6 +400,9 @@ Bus_FileClose(
     WdfChildListEndIteration(list, &iterator);
 }
 
+//
+// Called by PDO when a boot-up stage has been completed
+// 
 _Use_decl_annotations_
 VOID
 Bus_PdoStageResult(

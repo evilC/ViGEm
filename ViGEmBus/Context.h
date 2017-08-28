@@ -102,6 +102,9 @@ typedef struct _PDO_DEVICE_DATA
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(PDO_DEVICE_DATA, PdoGetData)
 
+//
+// FDO (bus device) context data
+// 
 typedef struct _FDO_DEVICE_DATA
 {
     //
@@ -114,6 +117,9 @@ typedef struct _FDO_DEVICE_DATA
     // 
     LONG NextSessionId;
 
+    //
+    // Collection holding pending plugin requests
+    // 
     WDFCOLLECTION PendingPluginRequests;
 
 } FDO_DEVICE_DATA, *PFDO_DEVICE_DATA;
@@ -122,7 +128,9 @@ typedef struct _FDO_DEVICE_DATA
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(FDO_DEVICE_DATA, FdoGetData)
 
+// 
 // Context data associated with file objects created by user mode applications
+// 
 typedef struct _FDO_FILE_DATA
 {
     //
@@ -134,6 +142,9 @@ typedef struct _FDO_FILE_DATA
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(FDO_FILE_DATA, FileObjectGetData)
 
+//
+// Context data for plugin requests
+// 
 typedef struct _FDO_PLUGIN_REQUEST_DATA
 {
     ULONG Serial;

@@ -106,7 +106,7 @@ NTSTATUS Bus_CreatePdo(
     // Get the FDO interface ASAP to report progress to bus
     // 
     status = WdfFdoQueryForInterface(Device,
-        &GUID_VIGEM_INTERFACE_STANDARD,
+        &GUID_VIGEM_INTERFACE_PDO,
         (PINTERFACE)&busInterface,
         sizeof(VIGEM_BUS_INTERFACE),
         VIGEM_BUS_INTERFACE_VERSION,
