@@ -40,7 +40,7 @@ typedef struct _VIGEM_CLIENT_T
 {
     HANDLE hBusDevice;
 
-} VIGEM_CLIENT_T;
+} VIGEM_CLIENT;
 
 typedef enum _VIGEM_TARGET_STATE
 {
@@ -85,9 +85,9 @@ PVIGEM_TARGET FORCEINLINE VIGEM_TARGET_ALLOC_INIT(
 
 PVIGEM_CLIENT vigem_alloc()
 {
-    auto driver = static_cast<PVIGEM_CLIENT>(malloc(sizeof(VIGEM_CLIENT_T)));
+    auto driver = static_cast<PVIGEM_CLIENT>(malloc(sizeof(VIGEM_CLIENT)));
     
-    RtlZeroMemory(driver, sizeof(VIGEM_CLIENT_T));
+    RtlZeroMemory(driver, sizeof(VIGEM_CLIENT));
     driver->hBusDevice = INVALID_HANDLE_VALUE;
 
     return driver;
@@ -186,6 +186,8 @@ void vigem_disconnect(PVIGEM_CLIENT vigem)
     if (vigem->hBusDevice != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vigem->hBusDevice);
+
+        RtlZeroMemory(vigem, sizeof(VIGEM_CLIENT));
         vigem->hBusDevice = INVALID_HANDLE_VALUE;
     }
 }
