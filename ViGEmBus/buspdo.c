@@ -98,7 +98,6 @@ NTSTATUS Bus_CreatePdo(
 
     PAGED_CODE();
 
-    UNREFERENCED_PARAMETER(Device);
 
     KdPrint((DRIVERNAME "Entered Bus_CreatePdo\n"));
 
