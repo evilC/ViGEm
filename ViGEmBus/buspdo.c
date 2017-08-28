@@ -593,11 +593,11 @@ VOID Pdo_EvtIoInternalDeviceControl(
             status = STATUS_SUCCESS;
 
             //
-            // This IOCTL code is a nice indicator that the virtual USB device is 
+            // This IOCTL code is a nice indicator that the virtual XUSB device is 
             // "powered up" and ready to get interacted with so we can report 
             // success to the parent bus.
             // 
-            BUS_PDO_REPORT_STAGE_RESULT(pdoData->BusInterface, ViGEmPdoUsbGetStatusFromDevice, pdoData->SerialNo, status);
+            BUS_PDO_REPORT_STAGE_RESULT(pdoData->BusInterface, ViGEmPdoInternalIoControl, pdoData->SerialNo, status);
 
             break;
 
@@ -606,6 +606,8 @@ VOID Pdo_EvtIoInternalDeviceControl(
             KdPrint((DRIVERNAME ">> >> URB_FUNCTION_ABORT_PIPE\n"));
 
             status = UsbPdo_AbortPipe(hDevice);
+
+            BUS_PDO_REPORT_STAGE_RESULT(pdoData->BusInterface, ViGEmPdoInternalIoControl, pdoData->SerialNo, status);
 
             break;
 
@@ -622,6 +624,13 @@ VOID Pdo_EvtIoInternalDeviceControl(
             KdPrint((DRIVERNAME ">> >> URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE\n"));
 
             status = UsbPdo_GetDescriptorFromInterface(urb, pdoData);
+
+            //
+            // This IOCTL code is a nice indicator that the virtual HIDUSB device is 
+            // "powered up" and ready to get interacted with so we can report 
+            // success to the parent bus.
+            // 
+            BUS_PDO_REPORT_STAGE_RESULT(pdoData->BusInterface, ViGEmPdoInternalIoControl, pdoData->SerialNo, status);
 
             break;
 
