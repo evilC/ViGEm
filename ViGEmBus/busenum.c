@@ -174,14 +174,11 @@ NTSTATUS Bus_PlugInDevice(
             //
             // Keep track of pending request in collection
             // 
+            WdfSpinLockAcquire(pFdoData->PendingPluginRequestsLock);
             status = WdfCollectionAdd(pFdoData->PendingPluginRequests, Request);
-            if(!NT_SUCCESS(status))
-            {
-                KdPrint((DRIVERNAME "WdfCollectionAdd failed with status 0x%X", status));
-                return status;
-            }
+            WdfSpinLockRelease(pFdoData->PendingPluginRequestsLock);
 
-            status = STATUS_PENDING;
+            status = NT_SUCCESS(status) ? STATUS_PENDING : status;
         }
     }
 

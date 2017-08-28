@@ -122,6 +122,11 @@ typedef struct _FDO_DEVICE_DATA
     // 
     WDFCOLLECTION PendingPluginRequests;
 
+    //
+    // Sync lock for pending request collection
+    // 
+    WDFSPINLOCK PendingPluginRequestsLock;
+
 } FDO_DEVICE_DATA, *PFDO_DEVICE_DATA;
 
 #define FDO_FIRST_SESSION_ID 100

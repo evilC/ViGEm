@@ -150,7 +150,7 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
 
 #pragma endregion
 
-#pragma region Create pending requests collection
+#pragma region Create pending requests collection & lock
 
     WDF_OBJECT_ATTRIBUTES_INIT(&collectionAttributes);
     collectionAttributes.ParentObject = device;
@@ -159,6 +159,16 @@ NTSTATUS Bus_EvtDeviceAdd(IN WDFDRIVER Driver, IN PWDFDEVICE_INIT DeviceInit)
     if (!NT_SUCCESS(status))
     {
         KdPrint((DRIVERNAME "WdfCollectionCreate failed with status 0x%X\n", status));
+        return STATUS_UNSUCCESSFUL;
+    }
+
+    WDF_OBJECT_ATTRIBUTES_INIT(&collectionAttributes);
+    collectionAttributes.ParentObject = device;
+
+    status = WdfSpinLockCreate(&collectionAttributes, &pFDOData->PendingPluginRequestsLock);
+    if (!NT_SUCCESS(status))
+    {
+        KdPrint((DRIVERNAME "WdfSpinLockCreate failed with status 0x%X\n", status));
         return STATUS_UNSUCCESSFUL;
     }
 
@@ -430,6 +440,7 @@ Bus_PdoStageResult(
     // 
     if (!NT_SUCCESS(Status) || Stage == ViGEmPdoInternalIoControl)
     {
+        WdfSpinLockAcquire(pFdoData->PendingPluginRequestsLock);
         for (i = 0; i < WdfCollectionGetCount(pFdoData->PendingPluginRequests); i++)
         {
             curRequest = WdfCollectionGetItem(pFdoData->PendingPluginRequests, i);
@@ -441,10 +452,11 @@ Bus_PdoStageResult(
                 WdfRequestComplete(curRequest, Status);
 
                 WdfCollectionRemove(pFdoData->PendingPluginRequests, curRequest);
-
-                return;
+                
+                break;
             }
         }
+        WdfSpinLockRelease(pFdoData->PendingPluginRequestsLock);
 
         KdPrint((DRIVERNAME "Warning: request for serial %d not found\n", Serial));
     }
