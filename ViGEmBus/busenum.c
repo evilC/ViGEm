@@ -78,7 +78,7 @@ NTSTATUS Bus_PlugInDevice(
     }
 
     *Transferred = length;
- 
+
     fileObject = WdfRequestGetFileObject(Request);
     if (fileObject == NULL)
     {
@@ -141,47 +141,61 @@ NTSTATUS Bus_PlugInDevice(
         description.ProductId = plugIn->ProductId;
     }
 
+    WdfSpinLockAcquire(pFdoData->PendingPluginRequestsLock);
+
+    KdPrint((DRIVERNAME "Items count: %d\n", WdfCollectionGetCount(pFdoData->PendingPluginRequests)));
+
     status = WdfChildListAddOrUpdateChildDescriptionAsPresent(WdfFdoGetDefaultChildList(Device), &description.Header, NULL);
+
+    if (!NT_SUCCESS(status))
+    {
+        KdPrint((DRIVERNAME "WdfChildListAddOrUpdateChildDescriptionAsPresent failed with 0x%X\n", status));
+
+        goto pluginEnd;
+    }
 
     if (status == STATUS_OBJECT_NAME_EXISTS)
     {
-        //
-        // The description is already present in the list, the serial number is
-        // not unique, return error.
-        //
         status = STATUS_INVALID_PARAMETER;
+        goto pluginEnd;
     }
-    else
+
+    WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&requestAttribs, FDO_PLUGIN_REQUEST_DATA);
+
+    //
+    // Allocate context data to request
+    // 
+    status = WdfObjectAllocateContext(Request, &requestAttribs, (PVOID)&pReqData);
+    if (!NT_SUCCESS(status))
     {
-        WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&requestAttribs, FDO_PLUGIN_REQUEST_DATA);
+        KdPrint((DRIVERNAME "WdfCollectionAdd failed with 0x%X\n", status));
 
-        //
-        // Allocate context data to request
-        // 
-        status = WdfObjectAllocateContext(
-            Request,
-            &requestAttribs,
-            (PVOID)&pReqData
-        );
-
-        if (NT_SUCCESS(status))
-        {
-            //
-            // Glue current serial to request
-            // 
-            pReqData->Serial = plugIn->SerialNo;
-            
-            //
-            // Keep track of pending request in collection
-            // 
-            WdfSpinLockAcquire(pFdoData->PendingPluginRequestsLock);
-            status = WdfCollectionAdd(pFdoData->PendingPluginRequests, Request);
-            WdfSpinLockRelease(pFdoData->PendingPluginRequestsLock);
-
-            status = NT_SUCCESS(status) ? STATUS_PENDING : status;
-        }
+        goto pluginEnd;
     }
 
+    //
+    // Glue current serial to request
+    // 
+    pReqData->Serial = plugIn->SerialNo;
+
+    //
+    // Keep track of pending request in collection
+    // 
+    status = WdfCollectionAdd(pFdoData->PendingPluginRequests, Request);
+    if (!NT_SUCCESS(status))
+    {
+        KdPrint((DRIVERNAME "WdfCollectionAdd failed with 0x%X\n", status));
+
+        goto pluginEnd;
+    }
+
+    KdPrint((DRIVERNAME "Added item with serial: %d\n", plugIn->SerialNo));
+
+    status = NT_SUCCESS(status) ? STATUS_PENDING : status;
+
+pluginEnd:
+
+    WdfSpinLockRelease(pFdoData->PendingPluginRequestsLock);
     return status;
 }
 

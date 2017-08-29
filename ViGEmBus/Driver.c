@@ -426,6 +426,7 @@ Bus_PdoStageResult(
     PFDO_DEVICE_DATA pFdoData;
     WDFREQUEST curRequest;
     ULONG curSerial;
+    ULONG items;
 
     UNREFERENCED_PARAMETER(InterfaceHeader);
 
@@ -441,18 +442,26 @@ Bus_PdoStageResult(
     if (!NT_SUCCESS(Status) || Stage == ViGEmPdoInternalIoControl)
     {
         WdfSpinLockAcquire(pFdoData->PendingPluginRequestsLock);
-        for (i = 0; i < WdfCollectionGetCount(pFdoData->PendingPluginRequests); i++)
+
+        items = WdfCollectionGetCount(pFdoData->PendingPluginRequests);
+
+        KdPrint((DRIVERNAME "Items count: %d\n", items));
+
+        for (i = 0; i < items; i++)
         {
             curRequest = WdfCollectionGetItem(pFdoData->PendingPluginRequests, i);
             curSerial = PluginRequestGetData(curRequest)->Serial;
 
+            KdPrint((DRIVERNAME "Serial: %d, curSerial: %d\n", Serial, curSerial));
+
             if (Serial == curSerial)
             {
-                KdPrint((DRIVERNAME "Request for serial %d found\n", curSerial));
                 WdfRequestComplete(curRequest, Status);
 
                 WdfCollectionRemove(pFdoData->PendingPluginRequests, curRequest);
-                
+
+                KdPrint((DRIVERNAME "Removed item with serial: %d\n", curSerial));
+
                 break;
             }
         }
