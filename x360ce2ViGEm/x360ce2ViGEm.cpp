@@ -26,9 +26,10 @@ SOFTWARE.
 // x360ce2ViGEm.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 #include <Xinput.h>
-#include <ViGEmUM.h>
+#include <ViGEmClient.h>
 #include <chrono>
 #include <thread>
 
@@ -43,6 +44,9 @@ static HidGuardianOpen_t fpClose;
 BOOL WINAPI HandlerRoutine(
     _In_ DWORD dwCtrlType
 );
+
+static PVIGEM_TARGET targets[XUSER_MAX_COUNT];
+static PVIGEM_CLIENT g_client = nullptr;
 
 int main()
 {
@@ -64,26 +68,37 @@ int main()
     fpClose = reinterpret_cast<HidGuardianOpen_t>(GetProcAddress(cerberus, "HidGuardianClose"));
 
     printf("Bypassing HidGuardian\n");
-    if (fpOpen && fpOpen()) printf("Process whitelisted\n");
-    else printf("Warning: couldn't contatc HidGuardian\n");
+    if (fpOpen && fpOpen()) printf("Process white-listed\n");
+    else printf("Warning: couldn't contact HidGuardian\n");
 
     printf("Initializing emulation driver\n");
 
-    if (!VIGEM_SUCCESS(vigem_init())) {
+    g_client = vigem_alloc();
+
+    auto ret = vigem_connect(g_client);
+    if (!VIGEM_SUCCESS(ret)) {
         printf("Couldn't initialize emulation driver\n");
         return 1;
     }
 
+    for (auto i = 0; i < _countof(targets); i++)
+    {
+        targets[i] = vigem_target_x360_alloc();
+    }
+
     printf("Enabling XInput\n");
 
-    XInputEnable(TRUE);
-
-    VIGEM_TARGET targets[XUSER_MAX_COUNT];
-
-    for (auto i = 0; i < XUSER_MAX_COUNT; i++)
+    auto xinputMod = LoadLibrary(L"XInput1_3.dll");
+    if(!xinputMod)
     {
-        VIGEM_TARGET_INIT(&targets[i]);
+        printf("XInput1_3.dll not found\n");
+        return 1;
     }
+
+    auto pXInputEnable = reinterpret_cast<VOID(WINAPI*)(BOOL)>(GetProcAddress(xinputMod, "XInputEnable"));
+    auto pXInputGetState = reinterpret_cast<DWORD(WINAPI*)(DWORD, XINPUT_STATE*)>(GetProcAddress(xinputMod, "XInputGetState"));
+
+    pXInputEnable(TRUE);
 
     DWORD result;
     XINPUT_STATE state;
@@ -98,25 +113,22 @@ int main()
         {
             ZeroMemory(&state, sizeof(XINPUT_STATE));
 
-            result = XInputGetState(i, &state);
+            result = pXInputGetState(i, &state);
 
             if (result == ERROR_SUCCESS)
             {
-                vigem_target_set_vid(&targets[i], 0x1234);
-                vigem_target_set_pid(&targets[i], 0x0001);
-
-                if (VIGEM_SUCCESS(vigem_target_plugin(Xbox360Wired, &targets[i])))
+                if (VIGEM_SUCCESS(vigem_target_add(g_client, targets[i])))
                 {
-                    printf("Plugged in controller %d\t\t\t\t\n", targets[i].SerialNo);
+                    printf("Plugged in controller %d\t\t\t\t\n", vigem_target_get_index(targets[i]));
                 }
 
-                vigem_xusb_submit_report(targets[i], *reinterpret_cast<XUSB_REPORT*>(&state.Gamepad));
+                vigem_target_x360_update(g_client, targets[i], *reinterpret_cast<XUSB_REPORT*>(&state.Gamepad));
             }
             else
             {
-                if (VIGEM_SUCCESS(vigem_target_unplug(&targets[i])))
+                if (VIGEM_SUCCESS(vigem_target_remove(g_client, targets[i])))
                 {
-                    printf("Unplugged controller %d\t\t\t\t\n", targets[i].SerialNo);
+                    printf("Unplugged controller %d\t\t\t\t\n", vigem_target_get_index(targets[i]));
                 }
             }
         }
@@ -148,6 +160,16 @@ BOOL WINAPI HandlerRoutine(
     case CTRL_BREAK_EVENT: // Ctrl+Break
     case CTRL_CLOSE_EVENT: // Closing the console window
         if (fpClose)fpClose();
+
+        for (auto i = 0; i < _countof(targets); i++)
+        {
+            vigem_target_remove(g_client, targets[i]);
+            vigem_target_free(targets[i]);
+        }
+
+        vigem_disconnect(g_client);
+        vigem_free(g_client);
+
         return TRUE;
     default: break;
     }
