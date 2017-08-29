@@ -30,9 +30,10 @@ Additional build instructions are mentioned in the respective project READMEs, a
  - [Windows Driver Kit](https://developer.microsoft.com/en-us/windows/hardware/windows-driver-kit)
 
 ## Sponsors
-- [3dRudder](https://www.3drudder.com/eu/)
-- [Wohlfeil.IT e.U.](https://wohlfeil.it/)
-- [Parsec](https://parsec.tv/)
+ - [3dRudder](https://www.3drudder.com/eu/)
+ - [Wohlfeil.IT e.U.](https://wohlfeil.it/)
+ - [Parsec](https://parsec.tv/)
+ - [Rainway, Inc](https://rainway.io/)
 
 ## Users of ViGEm
  - [3dRudder](https://www.3drudder.com/eu/)
@@ -41,3 +42,4 @@ Additional build instructions are mentioned in the respective project READMEs, a
  - [WhiteKnight](https://autohotkey.com/boards/viewtopic.php?t=34890)
  - [InputMapper](https://inputmapper.com/)
  - [Oculus VR, LLC.](https://www.oculus.com/)
+ - [Rainway, Inc](https://rainway.io/)
