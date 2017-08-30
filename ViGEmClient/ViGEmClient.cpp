@@ -622,3 +622,8 @@ VIGEM_TARGET_TYPE vigem_target_get_type(PVIGEM_TARGET target)
 {
     return target->Type;
 }
+
+BOOL vigem_target_is_attached(PVIGEM_TARGET target)
+{
+    return (target->State == VIGEM_TARGET_CONNECTED);
+}
