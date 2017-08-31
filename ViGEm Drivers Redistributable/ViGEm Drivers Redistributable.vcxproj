@@ -38,9 +38,6 @@
     <ProjectReference Include="..\HidGuardian\HidGuardian.vcxproj">
       <Project>{09219acc-89f1-496f-93b8-fedca43b030d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\ViGEmBus\ViGEmBus.vcxproj">
-      <Project>{040101b0-ee5c-4ef1-99ee-9f81c795c001}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\XnaGuardian\XnaGuardian.vcxproj">
       <Project>{2bf69cdf-fcb9-478c-9d5d-10779846936f}</Project>
     </ProjectReference>
