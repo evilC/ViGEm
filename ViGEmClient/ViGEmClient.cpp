@@ -29,6 +29,7 @@ SOFTWARE.
 #include <SetupAPI.h>
 #include <initguid.h>
 
+#include "ViGEmBusShared.h"
 #include "ViGEmClient.h"
 #include <winioctl.h>
 #include <limits.h>
@@ -36,12 +37,18 @@ SOFTWARE.
 
 #define VIGEM_TARGETS_MAX   USHRT_MAX
 
+//
+// Represents a driver connection object.
+// 
 typedef struct _VIGEM_CLIENT_T
 {
     HANDLE hBusDevice;
 
 } VIGEM_CLIENT;
 
+//
+// Represents the (connection) state of a target device object.
+// 
 typedef enum _VIGEM_TARGET_STATE
 {
     VIGEM_TARGET_NEW,
