@@ -252,3 +252,4 @@ ModelManifest.xml
 /Signing/setup.inf
 /SIGN4WHQL.CMD.lnk
 /Signed
+/Src/Samples/VDX/imgui.ini
