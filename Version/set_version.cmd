@@ -16,8 +16,8 @@ rem ViGEm Bus Driver
 honestus --version-from-file version.txt --target-file "%solution%\ViGEmBus\ViGEmBus.rc" --resource.file-version --resource.product-version
 honestus --version-from-file version.txt --target-file "%solution%\ViGEmBus\ViGEmBus.vcxproj" --vcxproj.inf-time-stamp
 
-rem x360ce2ViGEm Application
-honestus --version-from-file version.txt --target-file "%solution%\x360ce2ViGEm\x360ce2ViGEm.rc" --resource.file-version --resource.product-version
+rem VDX Application
+honestus --version-from-file version.txt --target-file "%solution%\Src\Samples\VDX\VDX.rc" --resource.file-version --resource.product-version
 
 rem XnaGuardian Driver
 honestus --version-from-file version.txt --target-file "%solution%\XnaGuardian\XnaGuardian.rc" --resource.file-version --resource.product-version
@@ -29,8 +29,5 @@ honestus --version-from-file version.txt --target-file "%solution%\XInputExtensi
 rem ViGEmUM.NET Library
 honestus --version-from-file version.txt --target-file "%solution%\ViGEmUM.NET\Properties\AssemblyInfo.cs" --assembly.version --assembly.file-version
 
-rem ViGEmUM Library
-honestus --version-from-file version.txt --target-file "%solution%\ViGEmUM\ViGEmUM.rc" --resource.file-version --resource.product-version
-
 rem ViGEmClient Library
-honestus --version-from-file version.txt --target-file "%solution%\ViGEmClient\ViGEmClient.rc" --resource.file-version --resource.product-version
+honestus --version-from-file version.txt --target-file "%solution%\Src\ViGEmClient\ViGEmClient.rc" --resource.file-version --resource.product-version
