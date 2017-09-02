@@ -17,13 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NET", ".NET", "{61E7753D-95AC-446C-967F-28E0DA2061A6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HidGuardianTester", "HidGuardianTester\HidGuardianTester.vcxproj", "{58F3C66E-E356-4BA4-8B08-F89F5C6C911D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HidGuardianTester", "Src\HidGuardianTester\HidGuardianTester.vcxproj", "{58F3C66E-E356-4BA4-8B08-F89F5C6C911D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XnaGuardian", "XnaGuardian\XnaGuardian.vcxproj", "{2BF69CDF-FCB9-478C-9D5D-10779846936F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XnaGuardian", "Sys\XnaGuardian\XnaGuardian.vcxproj", "{2BF69CDF-FCB9-478C-9D5D-10779846936F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XInputExtensions", "XInputExtensions\XInputExtensions.vcxproj", "{7B900631-0BFC-434B-846E-9484F7C691E3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XInputExtensions", "Src\XInputExtensions\XInputExtensions.vcxproj", "{7B900631-0BFC-434B-846E-9484F7C691E3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XnaExtTester", "XnaExtTester\XnaExtTester.vcxproj", "{1424EC75-6D0C-4F0B-B231-D2D77107802B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XnaExtTester", "Src\XnaExtTester\XnaExtTester.vcxproj", "{1424EC75-6D0C-4F0B-B231-D2D77107802B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{03FE2778-FDEF-472D-A3E0-FA69F01DD119}"
 EndProject

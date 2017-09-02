@@ -45,8 +45,8 @@
     <ClCompile Include="XInput.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common\XInputOverrides.h" />
-    <ClInclude Include="..\Common\XnaGuardianShared.h" />
+    <ClInclude Include="$(SolutionDir)\Include\XInputOverrides.h" />
+    <ClInclude Include="$(SolutionDir)\Include\XnaGuardianShared.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="HidUsb.h" />

@@ -162,7 +162,7 @@
     <ClCompile Include="XnaExtTester.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XInputExtensions\XInputExtensions.vcxproj">
+    <ProjectReference Include="$(SolutionDir)\Src\XInputExtensions\XInputExtensions.vcxproj">
       <Project>{7b900631-0bfc-434b-846e-9484f7c691e3}</Project>
     </ProjectReference>
   </ItemGroup>

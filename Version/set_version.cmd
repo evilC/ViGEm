@@ -9,8 +9,8 @@ rem HidCerberus Server
 honestus --version-from-file version.txt --target-file "%solution%\HidCerberus.Srv\Properties\AssemblyInfo.cs" --assembly.version --assembly.file-version
 
 rem HidGuardian Driver
-honestus --version-from-file version.txt --target-file "%solution%\HidGuardian\HidGuardian.rc" --resource.file-version --resource.product-version
-honestus --version-from-file version.txt --target-file "%solution%\HidGuardian\HidGuardian.vcxproj" --vcxproj.inf-time-stamp
+honestus --version-from-file version.txt --target-file "%solution%\Sys\HidGuardian\HidGuardian.rc" --resource.file-version --resource.product-version
+honestus --version-from-file version.txt --target-file "%solution%\Sys\HidGuardian\HidGuardian.vcxproj" --vcxproj.inf-time-stamp
 
 rem ViGEm Bus Driver
 honestus --version-from-file version.txt --target-file "%solution%\ViGEmBus\ViGEmBus.rc" --resource.file-version --resource.product-version
@@ -20,11 +20,11 @@ rem VDX Application
 honestus --version-from-file version.txt --target-file "%solution%\Src\Samples\VDX\VDX.rc" --resource.file-version --resource.product-version
 
 rem XnaGuardian Driver
-honestus --version-from-file version.txt --target-file "%solution%\XnaGuardian\XnaGuardian.rc" --resource.file-version --resource.product-version
-honestus --version-from-file version.txt --target-file "%solution%\XnaGuardian\XnaGuardian.vcxproj" --vcxproj.inf-time-stamp
+honestus --version-from-file version.txt --target-file "%solution%\Sys\XnaGuardian\XnaGuardian.rc" --resource.file-version --resource.product-version
+honestus --version-from-file version.txt --target-file "%solution%\Sys\XnaGuardian\XnaGuardian.vcxproj" --vcxproj.inf-time-stamp
 
 rem XInputExtensions Library
-honestus --version-from-file version.txt --target-file "%solution%\XInputExtensions\XInputExtensions.rc" --resource.file-version --resource.product-version
+honestus --version-from-file version.txt --target-file "%solution%\Src\XInputExtensions\XInputExtensions.rc" --resource.file-version --resource.product-version
 
 rem ViGEmUM.NET Library
 honestus --version-from-file version.txt --target-file "%solution%\ViGEmUM.NET\Properties\AssemblyInfo.cs" --assembly.version --assembly.file-version
