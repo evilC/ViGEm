@@ -29,9 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{03FE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ViGEm Drivers Redistributable", "ViGEm Drivers Redistributable\ViGEm Drivers Redistributable.vcxproj", "{EE069A81-E257-45A5-8BE5-8BB6D539EC2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidCerberus.Srv", "HidCerberus.Srv\HidCerberus.Srv.csproj", "{0F3E263A-5FF4-4572-AF1B-06E249FABC7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidCerberus.Srv", "NET\HidCerberus.Srv\HidCerberus.Srv.csproj", "{0F3E263A-5FF4-4572-AF1B-06E249FABC7D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HidCerberus.Lib", "HidCerberus.Lib\HidCerberus.Lib.vcxproj", "{32FE870D-793B-4567-B7AD-927B5AD2FC9E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HidCerberus.Lib", "Src\HidCerberus.Lib\HidCerberus.Lib.vcxproj", "{32FE870D-793B-4567-B7AD-927B5AD2FC9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViGEmClient", "NET\ViGEmClient\ViGEmClient.csproj", "{AA18EBCF-7E9D-4BC5-8760-E8C6E9A773E5}"
 EndProject
