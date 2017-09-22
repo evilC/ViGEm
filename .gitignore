@@ -253,3 +253,5 @@ ModelManifest.xml
 /SIGN4WHQL.CMD.lnk
 /Signed
 /Src/Samples/VDX/imgui.ini
+/Src/ViGEmClient/Release (dynamic)
+/Release (dynamic)
