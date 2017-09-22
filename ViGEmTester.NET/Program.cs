@@ -1,6 +1,7 @@
-﻿using System;
-using Nefarius.ViGEm.Targets;
-using Nefarius.ViGEm.Targets.Xbox360;
+﻿using Nefarius.ViGEm.Client;
+using System;
+using Nefarius.ViGEm.Client.Targets;
+using Nefarius.ViGEm.Client.Targets.Xbox360;
 
 namespace ViGEmTester.NET
 {
@@ -8,6 +9,20 @@ namespace ViGEmTester.NET
     {
         private static void Main(string[] args)
         {
+            var client = new ViGEmClient();
+
+            var x360 = new Xbox360Controller(client);
+
+            x360.Connect();
+
+            var report = new Xbox360Report();
+            report.SetButtons(Xbox360Buttons.A, Xbox360Buttons.B);
+            report.SetAxis(Xbox360Axes.LeftTrigger, 0xFF);
+            report.SetAxis(Xbox360Axes.RightTrigger, 0xFF);
+
+            x360.SendReport(report);
+
+            /*
             var x360 = new Xbox360Controller();
             x360.FeedbackReceived +=
                 (sender, eventArgs) => Console.WriteLine(
@@ -31,6 +46,7 @@ namespace ViGEmTester.NET
                     $"LM: {eventArgs.LargeMotor}, " +
                     $"SM: {eventArgs.SmallMotor}, ");
             ds4.PlugIn();
+            */
 
             Console.ReadKey();
         }
