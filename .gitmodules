@@ -1,0 +1,6 @@
+[submodule "Src/Samples/VDX/imgui"]
+	path = Src/Samples/VDX/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "Src/Samples/VDX/imgui-sfml"]
+	path = Src/Samples/VDX/imgui-sfml
+	url = https://github.com/eliasdaler/imgui-sfml
