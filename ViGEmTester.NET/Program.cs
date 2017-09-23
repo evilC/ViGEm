@@ -13,6 +13,12 @@ namespace ViGEmTester.NET
 
             var x360 = new Xbox360Controller(client);
 
+            x360.FeedbackReceived +=
+                (sender, eventArgs) => Console.WriteLine(
+                    $"LM: {eventArgs.LargeMotor}, " +
+                    $"SM: {eventArgs.SmallMotor}, " +
+                    $"LED: {eventArgs.LedNumber}");
+
             x360.Connect();
 
             var report = new Xbox360Report();
