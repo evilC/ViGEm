@@ -1,6 +1,7 @@
 ﻿using Nefarius.ViGEm.Client;
 using System;
 using Nefarius.ViGEm.Client.Targets;
+using Nefarius.ViGEm.Client.Targets.DualShock4;
 using Nefarius.ViGEm.Client.Targets.Xbox360;
 
 namespace ViGEmTester.NET
@@ -11,6 +12,7 @@ namespace ViGEmTester.NET
         {
             var client = new ViGEmClient();
 
+#if X360
             var x360 = new Xbox360Controller(client);
 
             x360.FeedbackReceived +=
@@ -27,6 +29,16 @@ namespace ViGEmTester.NET
             report.SetAxis(Xbox360Axes.RightTrigger, 0xFF);
 
             x360.SendReport(report);
+#endif
+
+            var ds4 = new DualShock4Controller(client);
+
+            ds4.Connect();
+
+            var report = new DualShock4Report();
+            report.SetButtons(DualShock4Buttons.Cross);
+
+            ds4.SendReport(report);
 
             /*
             var x360 = new Xbox360Controller();
