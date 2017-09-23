@@ -26,8 +26,8 @@ honestus --version-from-file version.txt --target-file "%solution%\Sys\XnaGuardi
 rem XInputExtensions Library
 honestus --version-from-file version.txt --target-file "%solution%\Src\XInputExtensions\XInputExtensions.rc" --resource.file-version --resource.product-version
 
-rem ViGEmUM.NET Library
-honestus --version-from-file version.txt --target-file "%solution%\ViGEmUM.NET\Properties\AssemblyInfo.cs" --assembly.version --assembly.file-version
+rem ViGEmClient Library (.NET)
+honestus --version-from-file version.txt --target-file "%solution%\NET\ViGEmClient\Properties\AssemblyInfo.cs" --assembly.version --assembly.file-version
 
 rem ViGEmClient Library
 honestus --version-from-file version.txt --target-file "%solution%\Src\ViGEmClient\ViGEmClient.rc" --resource.file-version --resource.product-version
