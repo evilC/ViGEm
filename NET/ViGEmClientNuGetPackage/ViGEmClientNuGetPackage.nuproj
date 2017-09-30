@@ -33,9 +33,6 @@
     <IconUrl>https://raw.githubusercontent.com/nefarius/ViGEm/master/Installer/favicon.png</IconUrl>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ViGEmClient\ViGEmClient.csproj" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
