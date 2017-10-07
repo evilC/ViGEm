@@ -1,2 +1,0 @@
-Virtual Gamepad Emulation Framework
-###################################
