@@ -29,6 +29,8 @@
           crossorigin="anonymous"></script>
 
   <script>
+    function formatBytes(a,b){if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]}
+
     $( document ).ready( function() {
         $.ajax( {
           url : "https://api.github.com/repos/Nefarius/ViGEm/releases/latest",
@@ -40,16 +42,19 @@
             $.each( returndata.data.assets, function ( i, item ) {
               if (/ViGEmBus/i.test(item.name)) {
                 $('#vbus-count').text(item.download_count);
+                $('#vbus-size').text(formatBytes(item.size, 3));
                 $('#vbus-download').append('<a href="' + item.browser_download_url + '">Download</a>');
               }
 
               if (/HidGuardian/i.test(item.name)) {
                 $('#hidg-count').text(item.download_count);
+                $('#hidg-size').text(formatBytes(item.size, 3));
                 $('#hidg-download').append('<a href="' + item.browser_download_url + '">Download</a>');
               }
 
               if (/XnaGuardian/i.test(item.name)) {
                 $('#xnag-count').text(item.download_count);
+                $('#xnag-size').text(formatBytes(item.size, 3));
                 $('#xnag-download').append('<a href="' + item.browser_download_url + '">Download</a>');
               }
       	    } );
@@ -75,6 +80,7 @@
             <th>Version</th>
             <th>Release date</th>
             <th>Download count</th>
+            <th>Size</th>
             <th>Download link</th>
           </tr>
         </thead>
@@ -84,6 +90,7 @@
             <td class="common-version"></td>
             <td class="common-release"></td>
             <td id="vbus-count"></td>
+            <td id="vbus-size"></td>
             <td id="vbus-download"></td>
           </tr>
           <tr>
@@ -91,6 +98,7 @@
             <td class="common-version"></td>
             <td class="common-release"></td>
             <td id="hidg-count"></td>
+            <td id="hidg-size"></td>
             <td id="hidg-download"></td>
           </tr>
           <tr>
@@ -98,6 +106,7 @@
             <td class="common-version"></td>
             <td class="common-release"></td>
             <td id="xnag-count"></td>
+            <td id="xnag-size"></td>
             <td id="xnag-download"></td>
           </tr>
         </tbody>
