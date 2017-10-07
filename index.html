@@ -34,11 +34,25 @@
           url : "https://api.github.com/repos/Nefarius/ViGEm/releases/latest",
     	    dataType : "jsonp",
     	    success : function ( returndata ) {
-      	    /*$.each( returndata.data, function ( i, item ) {
-        	    alert(this);
-      	    } );*/
-            $('#vbus-version').text(returndata.data.tag_name);
-            $('#vbus-release').text($.format.date(new Date(returndata.data.published_at), 'dd.MM.yyyy'));
+      	    $('.common-version').text(returndata.data.tag_name);
+            $('.common-release').text($.format.date(new Date(returndata.data.published_at), 'dd.MM.yyyy'));
+
+            $.each( returndata.data.assets, function ( i, item ) {
+              if (/ViGEmBus/i.test(item.name)) {
+                $('#vbus-count').text(item.download_count);
+                $('#vbus-download').append('<a href="' + item.browser_download_url + '">Download</a>');
+              }
+
+              if (/HidGuardian/i.test(item.name)) {
+                $('#hidg-count').text(item.download_count);
+                $('#hidg-download').append('<a href="' + item.browser_download_url + '">Download</a>');
+              }
+
+              if (/XnaGuardian/i.test(item.name)) {
+                $('#xnag-count').text(item.download_count);
+                $('#xnag-download').append('<a href="' + item.browser_download_url + '">Download</a>');
+              }
+      	    } );
           }
        });
     });
@@ -60,19 +74,31 @@
             <th>Driver</th>
             <th>Version</th>
             <th>Release date</th>
-            <th>Age</th>
-            <th>City</th>
-            <th>Country</th>
+            <th>Download count</th>
+            <th>Download link</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>ViGEm Bus Driver</td>
-            <td id="vbus-version"></td>
-            <td id="vbus-release"></td>
-            <td>35</td>
-            <td>New York</td>
-            <td>USA</td>
+            <td class="common-version"></td>
+            <td class="common-release"></td>
+            <td id="vbus-count"></td>
+            <td id="vbus-download"></td>
+          </tr>
+          <tr>
+            <td>HidGuardian Filter Driver</td>
+            <td class="common-version"></td>
+            <td class="common-release"></td>
+            <td id="hidg-count"></td>
+            <td id="hidg-download"></td>
+          </tr>
+          <tr>
+            <td>XnaGuardian Filter Driver</td>
+            <td class="common-version"></td>
+            <td class="common-release"></td>
+            <td id="xnag-count"></td>
+            <td id="xnag-download"></td>
           </tr>
         </tbody>
       </table>
