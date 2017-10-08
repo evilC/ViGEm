@@ -57,6 +57,12 @@
                 $('#xnag-size').text(formatBytes(item.size, 3));
                 $('#xnag-download').append('<a href="' + item.browser_download_url + '">Download</a>');
               }
+
+              if (/VDX/i.test(item.name)) {
+                $('#vdx-count').text(item.download_count);
+                $('#vdx-size').text(formatBytes(item.size, 3));
+                $('#vdx-download').append('<a href="' + item.browser_download_url + '">Download</a>');
+              }
       	    } );
           }
        });
@@ -66,55 +72,95 @@
 
 <body>
 
-<div class="container">
-  <h2>Virtual Gamepad Emulation Framework - Downloads</h2>
-  <p>You can download ready-to-use pre-build Windows binaries for various ViGEm components below.</p>
-  <div class="panel panel-default">
-    <div class="panel-heading">Driver files</div>
-  <div class="panel-body">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Driver</th>
-            <th>Version</th>
-            <th>Release date</th>
-            <th>Download count</th>
-            <th>Size</th>
-            <th>Download link</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>ViGEm Bus Driver</td>
-            <td class="common-version"></td>
-            <td class="common-release"></td>
-            <td id="vbus-count"></td>
-            <td id="vbus-size"></td>
-            <td id="vbus-download"></td>
-          </tr>
-          <tr>
-            <td>HidGuardian Filter Driver</td>
-            <td class="common-version"></td>
-            <td class="common-release"></td>
-            <td id="hidg-count"></td>
-            <td id="hidg-size"></td>
-            <td id="hidg-download"></td>
-          </tr>
-          <tr>
-            <td>XnaGuardian Filter Driver</td>
-            <td class="common-version"></td>
-            <td class="common-release"></td>
-            <td id="xnag-count"></td>
-            <td id="xnag-size"></td>
-            <td id="xnag-download"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+  <div class="container">
+    <h2>Virtual Gamepad Emulation Framework - Downloads</h2>
+    <p>You can download ready-to-use pre-build Windows binaries for various ViGEm components below.</p>
 
+    <!-- Driver files table -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Driver files</div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Driver</th>
+                <th>Version</th>
+                <th>Release date</th>
+                <th>Download count</th>
+                <th>Size</th>
+                <th>Download link</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ViGEm Bus Driver</td>
+                <td class="common-version"></td>
+                <td class="common-release"></td>
+                <td id="vbus-count"></td>
+                <td id="vbus-size"></td>
+                <td id="vbus-download"></td>
+              </tr>
+              <tr>
+                <td>HidGuardian Filter Driver</td>
+                <td class="common-version"></td>
+                <td class="common-release"></td>
+                <td id="hidg-count"></td>
+                <td id="hidg-size"></td>
+                <td id="hidg-download"></td>
+              </tr>
+              <tr>
+                <td>XnaGuardian Filter Driver</td>
+                <td class="common-version"></td>
+                <td class="common-release"></td>
+                <td id="xnag-count"></td>
+                <td id="xnag-size"></td>
+                <td id="xnag-download"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Utilities table -->
+    <div class="panel panel-default">
+      <div class="panel-heading">Utilities</div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>Version</th>
+                <th>Release date</th>
+                <th>Download count</th>
+                <th>Size</th>
+                <th>Download link</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>VDX</td>
+                <td class="common-version"></td>
+                <td class="common-release"></td>
+                <td id="vdx-count"></td>
+                <td id="vdx-size"></td>
+                <td id="vdx-download"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+      <div class="container">
+        <p class="text-muted">This site is part of <a href="https://vigem.org">ViGEm.org</a></p>
+      </div>
+    </footer>
 
 </body>
 
