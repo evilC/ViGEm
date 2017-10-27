@@ -32,8 +32,5 @@
     <Tags>driver bus-driver windows-driver gamepad joypad joystick emulation framework xinput xusb xbone dualshock4 kmdf</Tags>
     <IconUrl>https://raw.githubusercontent.com/nefarius/ViGEm/master/Installer/favicon.png</IconUrl>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ViGEmClient\ViGEmClient.csproj" />
-  </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>
