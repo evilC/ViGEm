@@ -30,14 +30,14 @@
     <ClInclude Include="XInputExtensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\XnaGuardianShared.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\XInputOverrides.h">
-      <Filter>Header Files\Common</Filter>
+    <ClInclude Include="$(SolutionDir)\Include\XInputOverrides.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)\Include\XnaGuardianShared.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
