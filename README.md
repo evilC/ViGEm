@@ -22,12 +22,9 @@ This repository contains projects related to USB device emulation and HID device
 
 ## How to build
 Additional build instructions are mentioned in the respective project READMEs, although you'd *at least* need the following tools installed:
- - Visual Studio **2015** ([Community Edition](https://go.microsoft.com/fwlink/p/?LinkId=534599) is just fine)
-   - [Building drivers isn't yet supported by Visual Studio 2017](https://www.osr.com/blog/2017/03/07/visual-studio-2017-released-driver-devs-must-stay-vs-2015/)
- - [Windows 10 SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)
-   - Minimum required components:
-   ![](https://lh3.googleusercontent.com/-sVmz6EjNyR0/WXynV7ADGyI/AAAAAAAAAIM/MnjDfEsHg-omtrPD3qYoqnQTx2VsMfHAgCHMYCw/s0/winsdksetup%2B%25281%2529_2017-07-29_17-14-16.png)
- - [Windows Driver Kit](https://developer.microsoft.com/en-us/windows/hardware/windows-driver-kit)
+ - Visual Studio **2017** ([Community Edition](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) is just fine)
+   ![](https://lh3.googleusercontent.com/-euJV0pWLszY/WfNm8K_p6xI/AAAAAAAAAeE/SiPdU9WS4z0UR76kqRU6Sn38R-K9fa4qgCHMYCw/s0/mstsc_2017-10-27_19-03-42.png)
+ - [WDK for Windows 10, version 1709](https://developer.microsoft.com/en-us/windows/hardware/windows-driver-kit)
 
 ## Sponsors
  - [3dRudder](https://www.3drudder.com/eu/)
