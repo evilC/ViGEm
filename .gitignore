@@ -255,3 +255,5 @@ ModelManifest.xml
 /Src/Samples/VDX/imgui.ini
 /Src/ViGEmClient/Release (dynamic)
 /Release (dynamic)
+/Debug (dynamic)
+/Src/ViGEmClient/Debug (dynamic)
