@@ -147,6 +147,8 @@ VOID XnaGuardianEvtIoDefault(
 
     TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_QUEUE, "%!FUNC! Entry");
 
+    WdfRequestFormatRequestUsingCurrentType(Request);
+
     WDF_REQUEST_SEND_OPTIONS_INIT(&options,
         WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET);
 
@@ -332,10 +334,13 @@ VOID XnaGuardianEvtIoDeviceControl(
     default:
         break;
     }
-
+    
     //
     // Not our business, forward
     // 
+    
+    WdfRequestFormatRequestUsingCurrentType(Request);
+
     WDF_REQUEST_SEND_OPTIONS_INIT(&options,
         WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET);
 
@@ -426,6 +431,9 @@ VOID XnaGuardianEvtIoInternalDeviceControl(
     //
     // Not our business, forward
     // 
+    
+    WdfRequestFormatRequestUsingCurrentType(Request);
+
     WDF_REQUEST_SEND_OPTIONS_INIT(&options,
         WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET);
 
