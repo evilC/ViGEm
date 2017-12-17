@@ -1,19 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = ".build-net", ".\build-net\.build-net.csproj", "{F464ACCF-6506-4C16-BB45-BA91C3BE91B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = ".build-net", "build-net\.build-net.csproj", "{F464ACCF-6506-4C16-BB45-BA91C3BE91B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViGEmClient", "NET\ViGEmClient\ViGEmClient.csproj", "{AA18EBCF-7E9D-4BC5-8760-E8C6E9A773E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViGEmClient", "NET\ViGEmClient\ViGEmClient.csproj", "{AA18EBCF-7E9D-4BC5-8760-E8C6E9A773E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidCerberus.Srv", "NET\HidCerberus.Srv\HidCerberus.Srv.csproj", "{0F3E263A-5FF4-4572-AF1B-06E249FABC7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HidCerberus.Srv", "NET\HidCerberus.Srv\HidCerberus.Srv.csproj", "{0F3E263A-5FF4-4572-AF1B-06E249FABC7D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViGEm", "ViGEm", "{D28A7A72-91A1-4C11-AE76-FF0D1641E2A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HidGuardian", "HidGuardian", "{4DEFC33A-5634-4A02-8FD0-3C493137C6C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViGEmTester.NET", "NET\ViGEmTester.NET\ViGEmTester.NET.csproj", "{7659F652-836B-4ADD-83E1-F615ACFF24A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{042A2259-842A-4D90-98B0-6CA791EB65B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{0FFBE858-B4FA-4EC2-A338-11138F6FC66B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViGEmManagementModule", "NET\PowerShell\ViGEmManagementModule\ViGEmManagementModule.csproj", "{4793CC4A-6448-48E0-AE26-B6BB5CCCBED8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +41,10 @@ Global
 		{7659F652-836B-4ADD-83E1-F615ACFF24A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7659F652-836B-4ADD-83E1-F615ACFF24A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7659F652-836B-4ADD-83E1-F615ACFF24A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4793CC4A-6448-48E0-AE26-B6BB5CCCBED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4793CC4A-6448-48E0-AE26-B6BB5CCCBED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4793CC4A-6448-48E0-AE26-B6BB5CCCBED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4793CC4A-6448-48E0-AE26-B6BB5CCCBED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +53,8 @@ Global
 		{AA18EBCF-7E9D-4BC5-8760-E8C6E9A773E5} = {D28A7A72-91A1-4C11-AE76-FF0D1641E2A7}
 		{0F3E263A-5FF4-4572-AF1B-06E249FABC7D} = {4DEFC33A-5634-4A02-8FD0-3C493137C6C9}
 		{7659F652-836B-4ADD-83E1-F615ACFF24A3} = {D28A7A72-91A1-4C11-AE76-FF0D1641E2A7}
+		{0FFBE858-B4FA-4EC2-A338-11138F6FC66B} = {042A2259-842A-4D90-98B0-6CA791EB65B8}
+		{4793CC4A-6448-48E0-AE26-B6BB5CCCBED8} = {0FFBE858-B4FA-4EC2-A338-11138F6FC66B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C8E6CC4-BC33-4E9A-8BBB-96CA9C57B51A}
