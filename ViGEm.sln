@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Driver", "Driver", "{33690A14-2B0D-474F-B551-6C6F3E10FC3B}"
 EndProject
@@ -167,8 +167,8 @@ Global
 		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|ARM64.Build.0 = Debug (dynamic)|Win32
 		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|x64.ActiveCfg = Release (static)|x64
 		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|x64.Build.0 = Release (static)|x64
-		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|x86.ActiveCfg = Release (dynamic)|Win32
-		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|x86.Build.0 = Release (dynamic)|Win32
+		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|x86.ActiveCfg = Release (static)|Win32
+		{7DB06674-1F4F-464B-8E1C-172E9587F9DC}.Release|x86.Build.0 = Release (static)|Win32
 		{B2F186E5-FD05-4434-8A7F-23B03CA2B20F}.Debug|ARM.ActiveCfg = Debug|Win32
 		{B2F186E5-FD05-4434-8A7F-23B03CA2B20F}.Debug|ARM64.ActiveCfg = Debug|Win32
 		{B2F186E5-FD05-4434-8A7F-23B03CA2B20F}.Debug|x64.ActiveCfg = Debug|x64

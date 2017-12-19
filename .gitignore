@@ -257,3 +257,5 @@ ModelManifest.xml
 /Release (dynamic)
 /Debug (dynamic)
 /Src/ViGEmClient/Debug (dynamic)
+/Src/ViGEmClient/Release (static)
+/Release (static)
