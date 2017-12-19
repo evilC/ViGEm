@@ -3,8 +3,6 @@
 # ViGEm
 Virtual Gamepad Emulation Framework
 
-Follow development progress on [Twitter](https://twitter.com/CNefarius) and [YouTube](https://www.youtube.com/user/nefarius2k8)! Like my stuff? [Support me on Patreon](https://www.patreon.com/nefarius)!
-
 This repository contains projects related to USB device emulation and HID device manipulation on the Windows platform.
 
 ## Projects
