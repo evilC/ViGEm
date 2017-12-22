@@ -8,7 +8,7 @@ This repository contains projects related to USB device emulation and HID device
 ## Projects
 - [ViGEm Bus Driver](../../tree/master/Sys/ViGEmBus) - a Windows kernel-mode driver which supports emulating various well-known USB gamepads.
 - [ViGEm User-Mode Library](../../tree/master/Src/ViGEmClient) - a Windows user-mode library which provides access to bus driver.
-- [ViGEm User-Mode Assembly](../../tree/master/ViGEmUM.NET) - a managed wrapper assembly around the user-mode library for .NET applications.
+- [ViGEm User-Mode Assembly](../../tree/master/NET/ViGEmClient) - a managed wrapper assembly around the user-mode library for .NET applications.
 - [ViGEmTester](../../tree/master/Src/Samples/ViGEmTester) - general purpose test application for debugging purposes.
 - [ViGEmTester.NET](../../tree/master/ViGEmTester.NET) - general purpose managed test application for debugging purposes.
 - [x360ce to ViGEm sample application](../../tree/master/Src/Samples/VDX) - sample application adding ViGEm support to [x360ce](https://github.com/x360ce/x360ce).
