@@ -21,6 +21,9 @@ This repository contains projects related to USB device emulation and HID device
 - [HidCerberus.Lib](../../tree/master/Src/HidCerberus.Lib) - a Windows user-mode library for interaction with `HidCerberus.Srv`.
 - [XInputExtensions](../../tree/master/Src/XInputExtensions) - a Windows user-mode library for interaction with the `XnaGuardian` driver.
 
+## Documentation
+[Check out the Wiki](https://github.com/nefarius/ViGEm/wiki).
+
 ## How to build
 Additional build instructions are mentioned in the respective project READMEs, although you'd *at least* need the following tools installed:
  - Visual Studio **2017** ([Community Edition](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) is just fine)
