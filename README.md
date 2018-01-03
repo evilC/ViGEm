@@ -44,3 +44,4 @@ Additional build instructions are mentioned in the respective project READMEs, a
  - [InputMapper](https://inputmapper.com/)
  - [Oculus VR, LLC.](https://www.oculus.com/)
  - [Rainway, Inc](https://rainway.io/)
+ - [WiimoteHook](https://forum.cemu.info/showthread.php/140-WiimoteHook-Nintendo-Wii-Remote-with-Motion-Rumble-and-Nunchuk-support)
