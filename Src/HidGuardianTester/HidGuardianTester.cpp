@@ -27,6 +27,11 @@ int main()
     HidGuardianOpen_t fpOpen = reinterpret_cast<HidGuardianOpen_t>(GetProcAddress(cerberus, "HidGuardianOpen"));
     HidGuardianOpen_t fpClose = reinterpret_cast<HidGuardianOpen_t>(GetProcAddress(cerberus, "HidGuardianClose"));
 
+    if (!fpOpen || !fpClose) {
+        printf("Exports not found, is HidCerberus.Lib.dll in my directory?\n");
+        return -1;
+    }
+
     fpOpen();
 
     auto deviceInfoSet = SetupDiGetClassDevs(&hidClass, nullptr, nullptr, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
