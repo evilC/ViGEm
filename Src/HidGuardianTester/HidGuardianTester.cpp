@@ -13,6 +13,7 @@ typedef void (WINAPI* HidGuardianClose_t)();
 
 
 #include <pshpack1.h>
+#include <time.h>
 
 typedef struct _HIDGUARDIAN_GET_CREATE_REQUEST
 {
@@ -82,45 +83,45 @@ int main()
 
     printf("hDevice = 0x%p, error = %d\n", hDevice, GetLastError());
 
-    DWORD returned = 0;
-    HIDGUARDIAN_GET_CREATE_REQUEST cr;
-    ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
+    srand(time(NULL));
 
-    cr.RequestId = 1337;
+    while (TRUE) {
+        DWORD returned = 0;
+        HIDGUARDIAN_GET_CREATE_REQUEST cr;
+        ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
 
-    auto ret = DeviceIoControl(hDevice,
-        IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
-        (LPVOID)&cr,
-        sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
-        (LPVOID)&cr,
-        sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
-        &returned,
-        nullptr);
+        cr.RequestId = rand() % (4096 - 1024 + 1) + 1024;
 
-    printf("DeviceIndex = %d\n", cr.DeviceIndex);
-    printf("ProcessId = %d\n", cr.ProcessId);
+        auto ret = DeviceIoControl(hDevice,
+            IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
+            (LPVOID)&cr,
+            sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
+            (LPVOID)&cr,
+            sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
+            &returned,
+            nullptr);
 
-    getchar();
+        printf("DeviceIndex = %d\n", cr.DeviceIndex);
+        printf("ProcessId = %d\n", cr.ProcessId);
 
-    HIDGUARDIAN_SET_CREATE_REQUEST sr;
-    ZeroMemory(&sr, sizeof(HIDGUARDIAN_SET_CREATE_REQUEST));
+        HIDGUARDIAN_SET_CREATE_REQUEST sr;
+        ZeroMemory(&sr, sizeof(HIDGUARDIAN_SET_CREATE_REQUEST));
 
-    sr.RequestId = cr.RequestId;
-    sr.DeviceIndex = cr.DeviceIndex;
-    sr.IsAllowed = TRUE;
+        sr.RequestId = cr.RequestId;
+        sr.DeviceIndex = cr.DeviceIndex;
+        sr.IsAllowed = TRUE;
 
-    ret = DeviceIoControl(hDevice,
-        IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST,
-        (LPVOID)&sr,
-        sizeof(HIDGUARDIAN_SET_CREATE_REQUEST),
-        nullptr,
-        0,
-        &returned,
-        nullptr);
+        ret = DeviceIoControl(hDevice,
+            IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST,
+            (LPVOID)&sr,
+            sizeof(HIDGUARDIAN_SET_CREATE_REQUEST),
+            nullptr,
+            0,
+            &returned,
+            nullptr);
 
-    printf("Sent SET request\n");
-
-    getchar();
+        printf("Sent SET request\n");
+    }    
 
     return 0;
 
