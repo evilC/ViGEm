@@ -14,6 +14,8 @@ typedef void (WINAPI* HidGuardianClose_t)();
 
 #include <pshpack1.h>
 #include <time.h>
+#include <vector>
+#include <thread>
 
 typedef struct _HIDGUARDIAN_GET_CREATE_REQUEST
 {
@@ -65,41 +67,35 @@ typedef struct _HIDGUARDIAN_SET_CREATE_REQUEST
 
 #include <poppack.h>
 
-int main()
+ULONG IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST = 0x8000E004;
+ULONG IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST = 0x8000A008;
+HANDLE hDevice = INVALID_HANDLE_VALUE;
+
+void work()
 {
-    ULONG IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST = 0x8000E004;
-    ULONG IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST = 0x8000A008;
-
-    HANDLE hDevice = INVALID_HANDLE_VALUE;
-
-    // device found, open it
-    hDevice = CreateFile(L"\\\\.\\HidGuardian",
-        GENERIC_READ | GENERIC_WRITE,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,
-        nullptr,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        nullptr);
-
-    printf("hDevice = 0x%p, error = %d\n", hDevice, GetLastError());
-
-    srand(time(NULL));
-
     while (TRUE) {
+        printf("Started thread\n");
+
         DWORD returned = 0;
+        DWORD transfered = 0;
+        OVERLAPPED lOverlapped = { 0 };
+        lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
         HIDGUARDIAN_GET_CREATE_REQUEST cr;
         ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
 
         cr.RequestId = rand() % (4096 - 1024 + 1) + 1024;
 
-        auto ret = DeviceIoControl(hDevice,
+        DeviceIoControl(hDevice,
             IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
             (LPVOID)&cr,
             sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
             (LPVOID)&cr,
             sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
             &returned,
-            nullptr);
+            &lOverlapped);
+
+        GetOverlappedResult(hDevice, &lOverlapped, &transfered, TRUE);
 
         printf("DeviceIndex = %d\n", cr.DeviceIndex);
         printf("ProcessId = %d\n", cr.ProcessId);
@@ -111,17 +107,43 @@ int main()
         sr.DeviceIndex = cr.DeviceIndex;
         sr.IsAllowed = TRUE;
 
-        ret = DeviceIoControl(hDevice,
+        DeviceIoControl(hDevice,
             IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST,
             (LPVOID)&sr,
             sizeof(HIDGUARDIAN_SET_CREATE_REQUEST),
             nullptr,
             0,
             &returned,
-            nullptr);
+            &lOverlapped);
+
+        GetOverlappedResult(hDevice, &lOverlapped, &transfered, TRUE);
 
         printf("Sent SET request\n");
-    }    
+    }
+}
+
+int main()
+{
+    // device found, open it
+    hDevice = CreateFile(L"\\\\.\\HidGuardian",
+        GENERIC_READ | GENERIC_WRITE,
+        FILE_SHARE_READ | FILE_SHARE_WRITE,
+        nullptr,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_NO_BUFFERING | FILE_FLAG_WRITE_THROUGH | FILE_FLAG_OVERLAPPED,
+        nullptr);
+
+    printf("hDevice = 0x%p, error = %d\n", hDevice, GetLastError());
+
+    srand(time(NULL));
+
+    std::vector<std::thread> threads;
+
+    for (int i = 0; i < 20; ++i) {
+        threads.push_back(std::thread(work));
+    }
+
+    getchar();
 
     return 0;
 
