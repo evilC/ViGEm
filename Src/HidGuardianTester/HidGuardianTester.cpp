@@ -102,6 +102,26 @@ int main()
 
     getchar();
 
+    HIDGUARDIAN_SET_CREATE_REQUEST sr;
+    ZeroMemory(&sr, sizeof(HIDGUARDIAN_SET_CREATE_REQUEST));
+
+    sr.RequestId = cr.RequestId;
+    sr.DeviceIndex = cr.DeviceIndex;
+    sr.IsAllowed = TRUE;
+
+    ret = DeviceIoControl(hDevice,
+        IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST,
+        (LPVOID)&sr,
+        sizeof(HIDGUARDIAN_SET_CREATE_REQUEST),
+        nullptr,
+        0,
+        &returned,
+        nullptr);
+
+    printf("Sent SET request\n");
+
+    getchar();
+
     return 0;
 
 
