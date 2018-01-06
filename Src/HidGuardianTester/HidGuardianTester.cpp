@@ -86,6 +86,8 @@ int main()
     HIDGUARDIAN_GET_CREATE_REQUEST cr;
     ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
 
+    cr.RequestId = 1337;
+
     auto ret = DeviceIoControl(hDevice,
         IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
         (LPVOID)&cr,
