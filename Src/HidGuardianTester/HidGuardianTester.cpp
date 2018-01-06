@@ -12,9 +12,97 @@ typedef void (WINAPI* HidGuardianOpen_t)();
 typedef void (WINAPI* HidGuardianClose_t)();
 
 
+#include <pshpack1.h>
+
+typedef struct _HIDGUARDIAN_GET_CREATE_REQUEST
+{
+    //
+    // Arbitrary value to match request and response
+    // 
+    IN ULONG RequestId;
+
+    //
+    // ID of the process this request is related to
+    // 
+    OUT ULONG ProcessId;
+
+    //
+    // Index of device this request belongs to (zero-based)
+    // 
+    OUT ULONG DeviceIndex;
+
+    //
+    // Buffer containing Hardware ID string
+    // 
+    OUT PWSTR HardwareIdBuffer;
+
+    //
+    // Size of buffer for Hardware ID
+    // 
+    OUT ULONG HardwareIdBufferLength;
+
+} HIDGUARDIAN_GET_CREATE_REQUEST, *PHIDGUARDIAN_GET_CREATE_REQUEST;
+
+typedef struct _HIDGUARDIAN_SET_CREATE_REQUEST
+{
+    //
+    // Arbitrary value to match request and response
+    // 
+    IN ULONG RequestId;
+
+    //
+    // Index of device this request belongs to (zero-based)
+    // 
+    IN ULONG DeviceIndex;
+
+    //
+    // TRUE if WdfRequestTypeCreate is allowed, FALSE otherwise
+    // 
+    IN BOOLEAN IsAllowed;
+
+} HIDGUARDIAN_SET_CREATE_REQUEST, *PHIDGUARDIAN_SET_CREATE_REQUEST;
+
+#include <poppack.h>
+
 int main()
 {
+    ULONG IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST = 0x8000E004;
+    ULONG IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST = 0x8000A008;
+
     HANDLE hDevice = INVALID_HANDLE_VALUE;
+
+    // device found, open it
+    hDevice = CreateFile(L"\\\\.\\HidGuardian",
+        GENERIC_READ | GENERIC_WRITE,
+        FILE_SHARE_READ | FILE_SHARE_WRITE,
+        nullptr,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        nullptr);
+
+    printf("hDevice = 0x%p, error = %d\n", hDevice, GetLastError());
+
+    DWORD returned = 0;
+    HIDGUARDIAN_GET_CREATE_REQUEST cr;
+    ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
+
+    auto ret = DeviceIoControl(hDevice,
+        IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
+        (LPVOID)&cr,
+        sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
+        (LPVOID)&cr,
+        sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
+        &returned,
+        nullptr);
+
+    printf("DeviceIndex = %d\n", cr.DeviceIndex);
+    printf("ProcessId = %d\n", cr.ProcessId);
+
+    getchar();
+
+    return 0;
+
+
     SP_DEVICE_INTERFACE_DATA deviceInterfaceData = { 0 };
     deviceInterfaceData.cbSize = sizeof(deviceInterfaceData);
     DWORD memberIndex = 0;
