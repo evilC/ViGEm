@@ -104,7 +104,7 @@ void work()
 
         printf("DeviceIndex = %d\n", cr->DeviceIndex);
         printf("ProcessId = %d\n", cr->ProcessId); 
-        printf("HardwareID = %ws", cr->HardwareIds);
+        wprintf(L"HardwareID = %s\n", cr->HardwareIds);
 
         HIDGUARDIAN_SET_CREATE_REQUEST sr;
         ZeroMemory(&sr, sizeof(HIDGUARDIAN_SET_CREATE_REQUEST));
