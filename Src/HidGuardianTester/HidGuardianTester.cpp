@@ -85,6 +85,8 @@ void work()
         ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
 
         cr.RequestId = rand() % (4096 - 1024 + 1) + 1024;
+        cr.HardwareIdBufferLength = 512;
+        cr.HardwareIdBuffer = (PWSTR)malloc(cr.HardwareIdBufferLength);
 
         DeviceIoControl(hDevice,
             IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
@@ -99,6 +101,9 @@ void work()
 
         printf("DeviceIndex = %d\n", cr.DeviceIndex);
         printf("ProcessId = %d\n", cr.ProcessId);
+        printf("HardwareId = %s\n", cr.HardwareIdBuffer);
+
+        free(cr.HardwareIdBuffer);
 
         HIDGUARDIAN_SET_CREATE_REQUEST sr;
         ZeroMemory(&sr, sizeof(HIDGUARDIAN_SET_CREATE_REQUEST));
