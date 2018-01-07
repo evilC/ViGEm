@@ -17,8 +17,15 @@ typedef void (WINAPI* HidGuardianClose_t)();
 #include <vector>
 #include <thread>
 
+#pragma warning(push)
+#pragma warning(disable:4200) // disable warnings for structures with zero length arrays.
 typedef struct _HIDGUARDIAN_GET_CREATE_REQUEST
 {
+    //
+    // Size of packet
+    // 
+    IN ULONG Size;
+
     //
     // Arbitrary value to match request and response
     // 
@@ -37,14 +44,10 @@ typedef struct _HIDGUARDIAN_GET_CREATE_REQUEST
     //
     // Buffer containing Hardware ID string
     // 
-    OUT PWSTR HardwareIdBuffer;
-
-    //
-    // Size of buffer for Hardware ID
-    // 
-    OUT ULONG HardwareIdBufferLength;
+    OUT WCHAR HardwareIds[];
 
 } HIDGUARDIAN_GET_CREATE_REQUEST, *PHIDGUARDIAN_GET_CREATE_REQUEST;
+#pragma warning(pop)
 
 typedef struct _HIDGUARDIAN_SET_CREATE_REQUEST
 {
@@ -81,36 +84,36 @@ void work()
         OVERLAPPED lOverlapped = { 0 };
         lOverlapped.hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
-        HIDGUARDIAN_GET_CREATE_REQUEST cr;
-        ZeroMemory(&cr, sizeof(HIDGUARDIAN_GET_CREATE_REQUEST));
+        auto size = sizeof(HIDGUARDIAN_GET_CREATE_REQUEST) + 512;
+        PHIDGUARDIAN_GET_CREATE_REQUEST cr = (PHIDGUARDIAN_GET_CREATE_REQUEST)malloc(size);
+        ZeroMemory(cr, size);
+        cr->Size = size;
 
-        cr.RequestId = rand() % (4096 - 1024 + 1) + 1024;
-        cr.HardwareIdBufferLength = 512;
-        cr.HardwareIdBuffer = (PWSTR)malloc(cr.HardwareIdBufferLength);
+        cr->RequestId = rand() % (4096 - 1024 + 1) + 1024;
 
         DeviceIoControl(hDevice,
             IOCTL_HIDGUARDIAN_GET_CREATE_REQUEST,
-            (LPVOID)&cr,
-            sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
-            (LPVOID)&cr,
-            sizeof(HIDGUARDIAN_GET_CREATE_REQUEST),
+            (LPVOID)cr,
+            size,
+            (LPVOID)cr,
+            size,
             &returned,
             &lOverlapped);
 
         GetOverlappedResult(hDevice, &lOverlapped, &transfered, TRUE);
 
-        printf("DeviceIndex = %d\n", cr.DeviceIndex);
-        printf("ProcessId = %d\n", cr.ProcessId);
-        printf("HardwareId = %s\n", cr.HardwareIdBuffer);
-
-        free(cr.HardwareIdBuffer);
+        printf("DeviceIndex = %d\n", cr->DeviceIndex);
+        printf("ProcessId = %d\n", cr->ProcessId); 
+        printf("HardwareID = %ws", cr->HardwareIds);
 
         HIDGUARDIAN_SET_CREATE_REQUEST sr;
         ZeroMemory(&sr, sizeof(HIDGUARDIAN_SET_CREATE_REQUEST));
 
-        sr.RequestId = cr.RequestId;
-        sr.DeviceIndex = cr.DeviceIndex;
+        sr.RequestId = cr->RequestId;
+        sr.DeviceIndex = cr->DeviceIndex;
         sr.IsAllowed = TRUE;
+
+        free(cr);
 
         DeviceIoControl(hDevice,
             IOCTL_HIDGUARDIAN_SET_CREATE_REQUEST,
