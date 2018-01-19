@@ -13,14 +13,17 @@
 .Set DestinationDir=HidGuardianPackage
 HidGuardian.sys
 HidGuardian.inf
+HidGuardian.pdb
 WdfCoinstaller01009.dll
 ; ViGEmBus
 .Set DestinationDir=ViGEmBusPackage
 ViGEmBus.sys
 ViGEmBus.inf
+ViGEmBus.pdb
 WdfCoinstaller01009.dll
 ; XnaGuardian
 .Set DestinationDir=XnaGuardianPackage
 XnaGuardian.sys
 XnaGuardian.inf
+XnaGuardian.pdb
 WdfCoinstaller01009.dll
