@@ -24,6 +24,9 @@ This repository contains projects related to USB device emulation and HID device
 ## Documentation
 [Check out the Wiki](https://github.com/nefarius/ViGEm/wiki).
 
+## Support
+[Check out our Discord](https://discord.gg/mfvA8B8).
+
 ## How to build
 Additional build instructions are mentioned in the respective project READMEs, although you'd *at least* need the following tools installed:
  - Visual Studio **2017** ([Community Edition](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) is just fine)
