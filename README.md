@@ -1,5 +1,10 @@
 ![Icon](https://raw.githubusercontent.com/nefarius/ViGEm/master/Installer/favicon.png)
 
+# ATTENTION! We are moving!
+**Hi there. [We're moving to our own organization](https://github.com/ViGEm)!** :smile: 
+
+**This shouldn't take too long. We've disabled the issue tracker temporarily. Cya in a bit!**
+
 # ViGEm
 Virtual Gamepad Emulation Framework
 
