@@ -41,8 +41,9 @@ namespace Nefarius.ViGEm.Client.Targets
         ///     Submits an <see cref="DualShock4Report"/> to this device which will update its state.
         /// </summary>
         /// <param name="report">The <see cref="DualShock4Report"/> to submit.</param>
-        public void SendReport(DualShock4Report report)
+        public override void SendReport(TargetReportBase r)
         {
+            var report = (DualShock4Report) r;
             // Convert managed to unmanaged structure
             var submit = new ViGEmClient.DS4_REPORT
             {

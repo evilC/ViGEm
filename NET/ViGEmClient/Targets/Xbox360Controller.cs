@@ -41,8 +41,9 @@ namespace Nefarius.ViGEm.Client.Targets
         ///     Submits an <see cref="Xbox360Report"/> to this device which will update its state.
         /// </summary>
         /// <param name="report">The <see cref="Xbox360Report"/> to submit.</param>
-        public void SendReport(Xbox360Report report)
+        public override void SendReport(TargetReportBase r)
         {
+            var report = (Xbox360Report) r;
             // Convert managed to unmanaged structure
             var submit = new ViGEmClient.XUSB_REPORT
             {

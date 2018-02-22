@@ -32,7 +32,7 @@ namespace Nefarius.ViGEm.Client.Targets.Xbox360
         RightThumbY
     }
 
-    public class Xbox360Report
+    public class Xbox360Report : TargetReportBase
     {
         public ushort Buttons { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Nefarius.ViGEm.Client.Exceptions;
+using Nefarius.ViGEm.Client.Targets;
 
 namespace Nefarius.ViGEm.Client
 {
@@ -81,6 +82,8 @@ namespace Nefarius.ViGEm.Client
                     throw new VigemRemovalFailedException();
             }
         }
+
+        public abstract void SendReport(TargetReportBase report);
 
         #region IDisposable Support
 

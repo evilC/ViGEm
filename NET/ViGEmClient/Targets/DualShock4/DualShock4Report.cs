@@ -49,7 +49,7 @@ namespace Nefarius.ViGEm.Client.Targets.DualShock4
         North = 0x0
     }
 
-    public class DualShock4Report
+    public class DualShock4Report : TargetReportBase
     {
         public DualShock4Report()
         {
